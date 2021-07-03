@@ -1,0 +1,32 @@
+@use '../utils' as *;
+
+.btn {
+  color: white;
+  border: none;
+  width: 170px;
+  height: 69px;
+  font-size: 18px;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: space-around;
+  align-content: center;
+  flex-wrap: wrap;
+  margin: 0 2rem 4rem 0;
+}
+
+.btn_blue {
+  background-color: $blue;
+}
+
+.btn_green {
+  background-color: $green;
+}
+
+.btn_red {
+  background-color: $red;
+}
+
+i.fas.fa-chevron-down {
+  font-family: $fa
+}
+

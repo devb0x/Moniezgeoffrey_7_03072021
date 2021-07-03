@@ -1,0 +1,38 @@
+@use "../utils" as *;
+
+.search-input {
+  position: relative;
+}
+
+input {
+  background-color: $gray;
+  height: 69px;
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+  color: $black;
+  font-size: 18px;
+  padding-left: 22px;
+
+  &:before {
+    font-family: $fa;
+    font-weight: 900;
+    content: '\f078';
+  }
+}
+
+label:after {
+  font-family: $fa;
+  font-weight: 900;
+  content: '\f002'; // search icon
+  font-size: 2rem;
+
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translate(-50%, -50%);
+}
+
+.search-buttons {
+  margin: 2em 0 4em 0;
+}

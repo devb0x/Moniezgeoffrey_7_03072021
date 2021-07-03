@@ -1,0 +1,19 @@
+@use "../utils" as *;
+
+html {
+  font-size: 100%;
+  font-family: $lato;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+  //outline: 1px solid blue;
+}
+
+body {
+  max-width: 1240px;
+  margin: auto;
+  padding: 0;
+}
