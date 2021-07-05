@@ -46,6 +46,57 @@ i.fas.fa-chevron-down {
   font-family: "Font Awesome 5 Free", sans-serif;
 }
 
+.recipe {
+  width: 380px;
+  max-width: 380px;
+  font-family: "Lato", sans-serif;
+  background-color: #E7E7E7;
+  border-radius: 5px;
+  margin: auto;
+}
+.recipe .recipe-img {
+  height: 178px;
+  background-color: #c6bebe;
+  border-radius: 5px 5px 0 0;
+}
+.recipe .recipe-header {
+  width: 90%;
+  margin: auto;
+  font-size: 18px;
+  display: flex;
+}
+.recipe .recipe-header__title {
+  font-weight: normal;
+  font-size: 18px;
+}
+.recipe .recipe-header__time {
+  font-weight: bold;
+  margin: auto 0 auto auto;
+}
+.recipe .recipe-infos {
+  width: 90%;
+  margin: auto;
+  display: flex;
+  font-size: 12px;
+}
+.recipe .recipe-infos__ingredients {
+  width: 50%;
+}
+.recipe .recipe-infos__ingredients ul {
+  list-style: none;
+  padding: 0;
+}
+.recipe .recipe-infos__description {
+  width: 50%;
+  font-family: "Roboto", sans-serif;
+  max-height: 109px;
+  overflow: hidden;
+}
+
+i {
+  margin-right: 0.5rem;
+}
+
 header {
   margin-top: 4em;
   margin-bottom: 2em;
@@ -90,6 +141,12 @@ label:after {
 
 .search-buttons {
   margin: 2em 0 4em 0;
+}
+
+.recipes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem;
 }
 
 /*# sourceMappingURL=style.css.map */
