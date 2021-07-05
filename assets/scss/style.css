@@ -49,11 +49,10 @@ i.fas.fa-chevron-down {
 .recipe {
   width: 380px;
   max-width: 380px;
-  height: 364px;
-  max-height: 364px;
   font-family: "Lato", sans-serif;
   background-color: #E7E7E7;
   border-radius: 5px;
+  margin: auto;
 }
 .recipe .recipe-img {
   height: 178px;
@@ -90,6 +89,8 @@ i.fas.fa-chevron-down {
 .recipe .recipe-infos__description {
   width: 50%;
   font-family: "Roboto", sans-serif;
+  max-height: 109px;
+  overflow: hidden;
 }
 
 i {
@@ -140,6 +141,12 @@ label:after {
 
 .search-buttons {
   margin: 2em 0 4em 0;
+}
+
+.recipes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem;
 }
 
 /*# sourceMappingURL=style.css.map */

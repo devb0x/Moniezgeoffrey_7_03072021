@@ -3,11 +3,12 @@
 .recipe {
   width: 380px;
   max-width: 380px;
-  height: 364px;
-  max-height: 364px;
+  //height: 364px;
+  //max-height: 364px;
   font-family: $lato;
   background-color: #E7E7E7;
   border-radius: 5px;
+  margin: auto;
 
   .recipe-img {
     height: 178px;
@@ -50,6 +51,8 @@
     &__description {
       width: 50%;
       font-family: $roboto;
+      max-height: 109px;
+      overflow: hidden;
      }
   }
 

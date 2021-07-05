@@ -36,3 +36,9 @@ label:after {
 .search-buttons {
   margin: 2em 0 4em 0;
 }
+
+.recipes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem;
+}
