@@ -21,53 +21,18 @@
 
   <section class="search">
 
-    <div class="search-input">
-      <label for="search"></label>
-      <input type="text" id="search" placeholder="Rechercher un ingrédient, appareil, ustensiles ou une recette">
-    </div>
+    <form action="" id="form">
+      <div class="search-input">
+        <label for="search"></label>
+        <input type="text" id="search" placeholder="Rechercher un ingrédient, appareil, ustensiles ou une recette">
+      </div>
+    </form>
 
     <div class="search-buttons">
-      <button type="button" class="btn btn_blue">Ingredients<i class="fas fa-chevron-down"></i></button>
+      <button type="button" class="btn btn_blue" id="ingredientsBtn">Ingredients<i class="fas fa-chevron-down"></i></button>
       <button type="button" class="btn btn_green">Appareil<i class="fas fa-chevron-down"></i></button>
       <button type="button" class="btn btn_red">Ustensiles<i class="fas fa-chevron-down"></i></button>
     </div>
-
-<!--    <div class="recipes">-->
-
-<!--      <div class="recipe">-->
-
-<!--        <div class="recipe-img"></div>-->
-
-<!--        <div class="recipe-header">-->
-<!--          <h2 class="recipe-header__title">Limonade de coco</h2>-->
-<!--          <span class="recipe-header__time"><i class="far fa-clock"></i>10min</span>-->
-<!--        </div>-->
-
-<!--        <div class="recipe-infos">-->
-
-<!--          <div class="recipe-infos__ingredients">-->
-<!--            <ul>-->
-<!--              <li>-->
-<!--                Lait de coco: <span>400ml</span>-->
-<!--              </li>-->
-<!--              <li>-->
-<!--                Jus de citron: <span>2</span>-->
-<!--              </li>-->
-<!--              <li>-->
-<!--                Creme de coco: <span>4 cuillères</span>-->
-<!--              </li>-->
-<!--            </ul>-->
-<!--          </div>-->
-
-<!--          <div class="recipe-infos__description">-->
-<!--            Mettre les glaçons à votre goût dans le blender, ajouter le lait, la crème de coco, le jus de 2 citrons et le sucre. Mixer jusqu'à avoir la consistence désirée,-->
-<!--          </div>-->
-
-<!--        </div>-->
-<!--      </div>-->
-
-
-<!--    </div>-->
 
   </section>
 
@@ -107,6 +72,10 @@
             </div>
 
   </section>
+
+  <div>
+    <button id="reset" style="position: absolute; top: 0; left: 0">reset</button>
+  </div>
 
   <script src="./assets/js/app.js" type="module"></script>
   <script src="./assets/js/search.js" type="module"></script>
