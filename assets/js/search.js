@@ -4,6 +4,9 @@ const recipes_section = document.getElementsByClassName('recipes')
 const reset = document.getElementById('reset')
 
 let searchResult = []
+let ingredientsFilter = []
+let appareilsFilter = []
+let ustensilsFilter = []
 
 export function search(userInput) {
   return fetch('https://raw.githubusercontent.com/devb0x/Moniezgeoffrey_7_03072021/master/assets/recipes.json')
@@ -42,9 +45,65 @@ export function search(userInput) {
       })
     })
     .then(() => {
+      /**
+       * we filter the result to avoid duplicate
+       * @type {*[]}
+       */
       searchResult = [...new Set(searchResult)]
       console.log(searchResult)
+
+      /**
+       * add ingredients
+       * add appareils in appareilsFilter(appliance in JSON)
+       * add ustensils
+       * @type {*[]}
+       */
+      searchResult.forEach(el => {
+        ingredientsFilter.push(el.ingredients)
+        appareilsFilter.push(el.appliance.toLowerCase())
+        ustensilsFilter.push(el.ustensils)
+      })
+
+      /**
+       * filter ingredients array
+       * @type {*[]}
+       */
+      let tempIngredientsArray = []
+      for (let i = 0; i < ingredientsFilter.length; i++) {
+        ingredientsFilter[i].forEach(ingredient => {
+          tempIngredientsArray.push(ingredient.ingredient.toLowerCase())
+        })
+      }
+      ingredientsFilter = [...new Set(tempIngredientsArray)]
+      console.warn(ingredientsFilter)
+
+      /**
+       * remove duplicate
+       * @type {*[]}
+       */
+      appareilsFilter = [...new Set(appareilsFilter)]
+
+      /**
+       * filter the ustensilsFilter array
+       * @type {*[]}
+       */
+      let tempUstensilsArray = []
+      for (let i = 0; i < ustensilsFilter.length; i++) {
+        ustensilsFilter[i].forEach(ustensil => {
+          tempUstensilsArray.push(ustensil.toLowerCase())
+        })
+      }
+      ustensilsFilter = [...new Set(tempUstensilsArray)]
+      console.warn(ustensilsFilter)
+
+      /**
+       * clear the recipes from the dom
+       */
       resetDOM()
+
+      /**
+       * create new Recipe and render it
+       */
       searchResult.forEach(el => {
         new Recipe(
           el.id,
@@ -57,7 +116,8 @@ export function search(userInput) {
           el.ustensils
         ).render()
       })
-      searchResult = []
+
+      resetArrays()
     })
 }
 
@@ -69,9 +129,16 @@ export function search(userInput) {
 export function resetDOM() {
   // console.log('reset')
   document.querySelectorAll(".recipe").forEach(e => e.parentNode.removeChild(e))
-  recipes_section.innerHTML = ''
+  // recipes_section.innerHTML = ''
 }
 
 reset.addEventListener('click', () => {
   resetDOM()
 })
+
+function resetArrays() {
+  searchResult = []
+  ingredientsFilter = []
+  appareilsFilter = []
+  ustensilsFilter = []
+}

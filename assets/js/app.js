@@ -52,7 +52,7 @@ function renderIngredientList(ingredient) {
 
 function searchIngredients() {
   let uniqueIngredientsList
-  console.log(recipes)
+  // console.log(recipes)
   recipes.forEach(el => {
     el.ingredients.forEach(ingredient => {
       // console.log(ingredient.ingredient) // ok
