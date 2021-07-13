@@ -1,19 +1,14 @@
-import { search } from "./search.js";
 import { Recipe } from "./Recipe.js";
 
-const search_input = document.getElementById('search')
-
-search_input.addEventListener('input', (e) => {
-  if (e.target.value.length >= 3) {
-    // console.log(e.target.value)
-    search(e.target.value)
-  }
-})
+const url = 'https://raw.githubusercontent.com/devb0x/Moniezgeoffrey_7_03072021/master/assets/recipes.json'
 
 let recipes = []
+let ingredients = []
+let appareils = []
+let ustensils = []
 
-function fetchAll() {
-  return fetch('https://raw.githubusercontent.com/devb0x/Moniezgeoffrey_7_03072021/master/assets/recipes.json')
+function fetchAllRecipes() {
+  return fetch(`${url}`)
     .then(response => {
       if (!response.ok) {
         throw new Error('HTTP error' + response.status)
@@ -27,9 +22,49 @@ function fetchAll() {
     })
 }
 
-function renderAll() {
+function fetchAllIngredients() {
   recipes.forEach(el => {
-    const recipe = new Recipe(
+    el.ingredients.filter(ingredient => {
+      ingredients.push(ingredient.ingredient)
+    })
+  })
+  /**
+   * remove duplicate ingredients
+   * @type {*[]}
+   */
+  ingredients = [...new Set(ingredients)]
+  console.warn(ingredients)
+}
+
+function fetchAllAppareils() {
+  recipes.forEach(el => {
+    appareils.push(el.appliance)
+  })
+  /**
+   * remove duplicate appareils
+   * @type {*[]}
+   */
+  appareils = [...new Set(appareils)]
+  console.warn(appareils)
+}
+
+function fetchAllUstensils() {
+  recipes.forEach(el => {
+    el.ustensils.filter(ustensil => {
+      ustensils.push(ustensil)
+    })
+  })
+  /**
+   * remove duplicate ustensils
+   * @type {*[]}
+   */
+  ustensils = [...new Set(ustensils)]
+  console.warn(ustensils)
+}
+
+function renderAllRecipes() {
+  recipes.forEach(el => {
+    new Recipe(
       el.id,
       el.name,
       el.servings,
@@ -42,6 +77,9 @@ function renderAll() {
   })
 }
 
-fetchAll().then(() => {
-  renderAll()
-})
+fetchAllRecipes()
+  .then(fetchAllIngredients)
+  .then(fetchAllAppareils)
+  .then(fetchAllUstensils)
+  .then(renderAllRecipes)
+
