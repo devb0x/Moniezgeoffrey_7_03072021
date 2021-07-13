@@ -1,16 +1,14 @@
-import {resetDOM, search} from "./search.js";
 import { Recipe } from "./Recipe.js";
 
-const form = document.getElementById('form')
-const search_input = document.getElementById('search')
-const recipes_section = document.querySelector('.recipes')
-const ingredients_btn = document.getElementById('ingredientsBtn')
+const url = 'https://raw.githubusercontent.com/devb0x/Moniezgeoffrey_7_03072021/master/assets/recipes.json'
 
 let recipes = []
-let ingredientsList = []
+let ingredients = []
+let appareils = []
+let ustensils = []
 
-export function fetchAll() {
-  return fetch('https://raw.githubusercontent.com/devb0x/Moniezgeoffrey_7_03072021/master/assets/recipes.json')
+function fetchAllRecipes() {
+  return fetch(`${url}`)
     .then(response => {
       if (!response.ok) {
         throw new Error('HTTP error' + response.status)
@@ -24,7 +22,47 @@ export function fetchAll() {
     })
 }
 
-function renderAll() {
+function fetchAllIngredients() {
+  recipes.forEach(el => {
+    el.ingredients.filter(ingredient => {
+      ingredients.push(ingredient.ingredient)
+    })
+  })
+  /**
+   * remove duplicate ingredients
+   * @type {*[]}
+   */
+  ingredients = [...new Set(ingredients)]
+  console.warn(ingredients)
+}
+
+function fetchAllAppareils() {
+  recipes.forEach(el => {
+    appareils.push(el.appliance)
+  })
+  /**
+   * remove duplicate appareils
+   * @type {*[]}
+   */
+  appareils = [...new Set(appareils)]
+  console.warn(appareils)
+}
+
+function fetchAllUstensils() {
+  recipes.forEach(el => {
+    el.ustensils.filter(ustensil => {
+      ustensils.push(ustensil)
+    })
+  })
+  /**
+   * remove duplicate ustensils
+   * @type {*[]}
+   */
+  ustensils = [...new Set(ustensils)]
+  console.warn(ustensils)
+}
+
+function renderAllRecipes() {
   recipes.forEach(el => {
     new Recipe(
       el.id,
@@ -39,56 +77,9 @@ function renderAll() {
   })
 }
 
-function renderIngredientList(ingredient) {
-  // console.log(ingredient)
-  const list = document.createElement('div')
-  list.innerHTML = `${ingredient}`
-  recipes_section.appendChild(list)
-}
-
-// const names = ['John', 'Paul', 'George', 'Ringo', 'John'];
-//
-// let unique = [...new Set(names)];
-
-function searchIngredients() {
-  let uniqueIngredientsList
-  // console.log(recipes)
-  recipes.forEach(el => {
-    el.ingredients.forEach(ingredient => {
-      // console.log(ingredient.ingredient) // ok
-      ingredientsList.push(ingredient.ingredient)
-    })
-  })
-  uniqueIngredientsList = [...new Set(ingredientsList)];
-  renderIngredientList(uniqueIngredientsList)
-  // console.log(uniqueIngredientsList)
-  // console.log(ingredientsList)
-}
-
-fetchAll().then(() => {
-  renderAll()
-})
-
-search_input.addEventListener('input', (e) => {
-  if (e.target.value.length >= 3) {
-    // console.log(e.target.value)
-    search(e.target.value)
-  }
-})
-
-ingredients_btn.addEventListener('click', (e) => {
-  console.log('searchIngredients()')
-  searchIngredients()
-})
-
-form.addEventListener('submit', (e) => {
-  e.preventDefault()
-  console.log('form submit')
-  if (search_input.value) {
-    // resetDOM()
-    console.log('value ok')
-    search(search_input.value)
-  }
-  // console.log(search_input.value)
-})
+fetchAllRecipes()
+  .then(fetchAllIngredients)
+  .then(fetchAllAppareils)
+  .then(fetchAllUstensils)
+  .then(renderAllRecipes)
 

@@ -1,4 +1,5 @@
-import {Recipe} from "./Recipe.js";
+import { Recipe } from "./Recipe.js"
+import {UstensilsList} from "./UstensilsList.js"
 
 const recipes_section = document.getElementsByClassName('recipes')
 const reset = document.getElementById('reset')
@@ -7,8 +8,16 @@ let searchResult = []
 let ingredientsFilter = []
 let appareilsFilter = []
 let ustensilsFilter = []
+let dataFilter = {
+  ingredients: [],
+  appareils: [],
+  ustensils: []
+} // push inside all data when we apply a filter
 
 export function search(userInput) {
+  let userResearch = []
+  userResearch.push(userInput.toLowerCase())
+
   return fetch('https://raw.githubusercontent.com/devb0x/Moniezgeoffrey_7_03072021/master/assets/recipes.json')
     .then(response => {
       if (!response.ok) {
@@ -17,7 +26,6 @@ export function search(userInput) {
       return response.json()
     })
     .then(json => {
-      // Object.values(json.recipes).forEach(data => {
         json.recipes.forEach(data => {
         /**
          * userInput est contenu dans le titre
@@ -64,6 +72,8 @@ export function search(userInput) {
         ustensilsFilter.push(el.ustensils)
       })
 
+      // dataFilter.appareils.push(appareilsFilter)
+
       /**
        * filter ingredients array
        * @type {*[]}
@@ -75,7 +85,13 @@ export function search(userInput) {
         })
       }
       ingredientsFilter = [...new Set(tempIngredientsArray)]
-      console.warn(ingredientsFilter)
+      // console.warn(ingredientsFilter)
+      ingredientsFilter.forEach(el => {
+        dataFilter.ingredients.push(el)
+      })
+      // console.log(dataFilter)
+      // dataFilter = [...new Set(dataFilter.ingredients)]
+      // console.error(dataFilter)
 
       /**
        * remove duplicate
@@ -94,7 +110,14 @@ export function search(userInput) {
         })
       }
       ustensilsFilter = [...new Set(tempUstensilsArray)]
-      console.warn(ustensilsFilter)
+      // console.warn(ustensilsFilter)
+      // dataFilter.ustensils.push(ustensilsFilter)
+
+      // console.log(dataFilter)
+
+      // TODO add function push ustensils in array before resetArrays()
+      // ustensilsList(ustensilsFilter)
+      new UstensilsList(ustensilsFilter)
 
       /**
        * clear the recipes from the dom
@@ -118,7 +141,15 @@ export function search(userInput) {
       })
 
       resetArrays()
+
+      document.querySelectorAll('.fa-times-circle').forEach((el) => {
+        el.addEventListener('click', (e) => {
+          console.warn('remove please')
+          el.parentNode.remove()
+        })
+      })
     })
+
 }
 
 /**
@@ -141,4 +172,19 @@ function resetArrays() {
   ingredientsFilter = []
   appareilsFilter = []
   ustensilsFilter = []
+  // dataFilter = {
+  //   ingredients: [],
+  //   appareils: [],
+  //   ustensils: []
+  // }
+}
+
+export function ustensilsList(ustensils) {
+  let array = []
+  // array.push(ustensils.slice())
+  ustensils.forEach(el => {
+    array.push(el)
+  })
+  // console.log(ustensils)
+  // console.warn(array)
 }
