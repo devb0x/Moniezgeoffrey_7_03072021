@@ -110,9 +110,11 @@ search_form.addEventListener('submit', (e) => {
     renderFilter(searchInput)
     renderSearch(result)
 
-    search = result
+    // search = result
 
-    // renderAppliancesList(result)
+    renderIngredientsList(result)
+    renderAppliancesList(result)
+    renderUstensilsList(result)
 
 
     search_form.reset()
@@ -187,8 +189,8 @@ function renderSearch(list) {
   })
 }
 
-function renderIngredientsList() {
-  let ingredients = search.map(el => el.ingredients.filter(el => el.ingredient))
+function renderIngredientsList(result) {
+  let ingredients = result.map(el => el.ingredients)
   console.log(ingredients)
 
   let list = []
@@ -229,10 +231,11 @@ function renderIngredientsList() {
 
 }
 
-function renderAppliancesList() {
-  let appliances = search.map(el => el.appliance)
+function renderAppliancesList(result) {
+  let appliances = result.map(el => el.appliance)
   appliances = [...new Set(appliances)]
 
+  console.log(appliances)
   appliances_list.innerHTML = `
       <label for="appliancesSearchInput"></label>
       <div class="dropdown-content__input">
@@ -262,9 +265,8 @@ function renderAppliancesList() {
 }
 
 function renderUstensilsList(result) {
-  let ustensils = search.map(el => el.ustensils)
+  let ustensils = result.map(el => el.ustensils)
   console.log(ustensils)
-
   let list = []
   ustensils.forEach(el => {
     el.forEach(ustensil => {
@@ -307,19 +309,19 @@ function renderUstensilsList(result) {
 ingredients_btn.addEventListener('click', () => {
   ingredients_btn.classList.add('hidden')
   ingredients_list.classList.toggle('hidden')
-  renderIngredientsList()
+  // renderIngredientsList()
 })
 
 appliances_btn.addEventListener('click', () => {
   appliances_btn.classList.add('hidden')
   appliances_list.classList.toggle('hidden')
-  renderAppliancesList()
+  // renderAppliancesList()
 })
 
 ustensils_btn.addEventListener('click', () => {
   ustensils_btn.classList.add('hidden')
   ustensils_list.classList.toggle('hidden')
-  renderUstensilsList(ustensils)
+  // renderUstensilsList(ustensils)
 })
 
 // ##############################################################
