@@ -17,3 +17,24 @@ body {
   margin: auto;
   padding: 0;
 }
+
+//.hidden {
+//  display: none;
+//}
+
+.bg_blue {
+  background-color: $blue;
+}
+
+.bg_green {
+  background-color: $green;
+}
+
+.bg_red {
+  background-color: $red;
+}
+
+
+.hidden {
+  display: none;
+}

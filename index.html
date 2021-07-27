@@ -13,7 +13,7 @@
 
   <title>Les Petits Plats</title>
 </head>
-<body>
+<body style="background-color: #404040">
 
   <header>
     <img src="./assets/images/les-petits-plats_logo.png" alt="logo les petits plats">
@@ -21,19 +21,33 @@
 
   <section class="search">
 
-    <form action="" id="form">
-      <div class="search-input">
-        <label for="search"></label>
-        <input type="text" id="search" placeholder="Rechercher un ingrédient, appareil, ustensiles ou une recette">
+    <form action="" id="searchForm">
+      <div class="searchFormInput">
+        <label for="searchFormInput"></label>
+        <input type="text" id="searchFormInput" placeholder="Rechercher un ingrédient, appareil, ustensiles ou une recette">
       </div>
     </form>
 
     <div class="search-buttons">
-      <button type="button" class="btn btn_blue" id="ingredientsBtn">Ingredients<i class="fas fa-chevron-down"></i></button>
-      <button type="button" class="btn btn_green">Appareils<i class="fas fa-chevron-down"></i></button>
-      <button type="button" class="btn btn_red" id="ustensilsBtn">Ustensiles<i class="fas fa-chevron-down"></i></button>
 
-<!--      <input type="text" placeholder="Ingredients" id="ingredientsBtn">-->
+      <div class="ingredients">
+        <button type="button" class="btn btn_blue" id="ingredientsBtn">Ingredients<i class="fas fa-chevron-down"></i></button>
+        <div id="ingredientsDropDown" class="dropdown-content bg_blue hidden">
+        </div>
+      </div>
+
+      <div class="appliances">
+        <button type="button" class="btn btn_green" id="appliancesBtn">Appareils<i class="fas fa-chevron-down"></i></button>
+        <div id="appliancesDropDown" class="dropdown-content bg_green hidden">
+        </div>
+      </div>
+
+      <div class="ustensils">
+        <button type="button" class="btn btn_red" id="ustensilsBtn">Ustensiles<i class="fas fa-chevron-down"></i></button>
+        <div id="ustensilsDropDown" class="dropdown-content bg_red hidden">
+        </div>
+      </div>
+
     </div>
 
     <div class="filters-list"></div>
@@ -82,7 +96,8 @@
   </div>
 
 <!--  <script src="assets/js/oldApp.js" type="module"></script>-->
-  <script src="./assets/js/app.js" type="module"></script>
+<!--  <script src="./assets/js/app.js" type="module"></script>-->
+  <script src="./assets/js/algo-un.js" type="module"></script>
 <!--  <script src="./assets/js/search.js" type="module"></script>-->
 </body>
 </html>
