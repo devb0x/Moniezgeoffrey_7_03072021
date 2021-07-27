@@ -16,6 +16,22 @@ body {
   padding: 0;
 }
 
+.bg_blue {
+  background-color: #3180f6;
+}
+
+.bg_green {
+  background-color: #68d9a4;
+}
+
+.bg_red {
+  background-color: #ed6454;
+}
+
+.hidden {
+  display: none;
+}
+
 .btn {
   color: white;
   border: none;
@@ -148,13 +164,22 @@ input {
   font-size: 18px;
   padding-left: 22px;
 }
-input:before {
-  font-family: "Font Awesome 5 Free", sans-serif;
-  font-weight: 900;
-  content: "";
+
+.search-buttons {
+  margin: 2em 0 4em 0;
 }
 
-label:after {
+.recipes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem;
+}
+
+.searchFormInput {
+  position: relative;
+}
+
+.searchFormInput:after {
   font-family: "Font Awesome 5 Free", sans-serif;
   font-weight: 900;
   content: "";
@@ -166,13 +191,66 @@ label:after {
 }
 
 .search-buttons {
-  margin: 2em 0 4em 0;
+  display: flex;
+}
+.search-buttons > div {
+  position: relative;
+}
+.search-buttons > .dropdown-content {
+  position: absolute;
+}
+.search-buttons .dropdown-content {
+  width: 667px;
+  margin-right: 2rem;
+  border-radius: 5px;
+}
+.search-buttons .dropdown-content__input {
+  display: flex;
+}
+.search-buttons .dropdown-content__input > i {
+  color: white;
+  width: 100px;
+  margin: auto;
+  text-align: center;
+  cursor: pointer;
+}
+.search-buttons .dropdown-content__input input {
+  background-color: transparent;
+  color: white;
+}
+.search-buttons .dropdown-content__input input:focus {
+  outline: none;
+  border-bottom: 1px solid;
+  border-radius: 0;
+}
+.search-buttons .dropdown-content__input input::placeholder {
+  color: white;
+  opacity: 50%;
 }
 
-.recipes {
+.filters-results-list {
+  list-style: none;
   display: flex;
   flex-wrap: wrap;
-  gap: 3rem;
+  gap: 2px;
+  padding-left: 22px;
+}
+.filters-results-list__item {
+  width: 33%;
+}
+.filters-results-list__item > a {
+  text-decoration: none;
+  color: white;
+}
+.filters-results-list__item::first-letter {
+  text-transform: capitalize;
+}
+.filters-results-list__item:last-child {
+  margin-bottom: 1.5rem;
+}
+
+.hidden {
+  display: none;
 }
 
 /*# sourceMappingURL=style.css.map */
