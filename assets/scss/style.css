@@ -47,6 +47,10 @@ body {
   border-radius: 5px;
 }
 
+.btn_black {
+  background-color: black;
+}
+
 .btn_blue {
   background-color: #3180f6;
 }

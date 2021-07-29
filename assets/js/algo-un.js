@@ -161,7 +161,7 @@ function renderAllRecipes() {
  */
 function renderFilter(filter) {
   const filter_span = document.createElement('span')
-  filter_span.classList.add('filter-item', 'btn_blue')
+  filter_span.classList.add('filter-item', 'btn_black')
   filter_span.innerHTML = `${filter} <i class="far fa-times-circle"></i>`
   filters_div.appendChild(filter_span)
   search_form.append(filters_div)
@@ -218,6 +218,7 @@ function renderIngredientsList(result) {
     const li = document.createElement('li')
     li.classList.add('filters-results-list__item')
     const link = document.createElement('a')
+    link.classList.add('filters-results-list__item-link')
     link.href = '#'
     link.innerText = `${el}`
     li.appendChild(link)
@@ -227,6 +228,67 @@ function renderIngredientsList(result) {
   document.querySelector('.ingredients-arrow').addEventListener('click', (e) => {
     ingredients_btn.classList.toggle('hidden')
     document.getElementById('ingredientsDropDown').classList.toggle('hidden')
+  })
+
+  document.getElementById('ingredientsSearchInput').addEventListener('input', (e) => {
+    // console.log(e.target.value)
+    const newList = ingredients.filter(ingredients => ingredients.toLowerCase().includes(e.target.value.toLowerCase()))
+    console.log(newList)
+    renderIngredientsListFiltered(newList)
+  })
+
+}
+
+function renderIngredientsListFiltered(newList) {
+  console.log(newList)
+  const ingredientsList = document.querySelector('.ingredients-list').innerHTML = ''
+
+  console.log(ingredientsList)
+  newList.forEach(el => {
+    const li = document.createElement('li')
+    li.classList.add('filters-results-list__item')
+    const link = document.createElement('a')
+    link.classList.add('filters-results-list__item-link')
+    link.href = '#'
+    link.innerText = `${el}`
+    li.appendChild(link)
+    document.querySelector('.ingredients-list').appendChild(li)
+  })
+
+}
+
+function renderAppliancesListFiltered(newList) {
+  console.log(newList)
+  const appliancesList = document.querySelector('.appliances-list').innerHTML = ''
+
+  console.log(appliancesList)
+  newList.forEach(el => {
+    const li = document.createElement('li')
+    li.classList.add('filters-results-list__item')
+    const link = document.createElement('a')
+    link.classList.add('filters-results-list__item-link')
+    link.href = '#'
+    link.innerText = `${el}`
+    li.appendChild(link)
+    document.querySelector('.appliances-list').appendChild(li)
+  })
+
+}
+
+function renderUstensilsListFiltered(newList) {
+  console.log(newList)
+  const ustensilsList = document.querySelector('.ustensils-list').innerHTML = ''
+
+  console.log(ustensilsList)
+  newList.forEach(el => {
+    const li = document.createElement('li')
+    li.classList.add('filters-results-list__item')
+    const link = document.createElement('a')
+    link.classList.add('filters-results-list__item-link')
+    link.href = '#'
+    link.innerText = `${el}`
+    li.appendChild(link)
+    document.querySelector('.ustensils-list').appendChild(li)
   })
 
 }
@@ -260,6 +322,11 @@ function renderAppliancesList(result) {
   document.querySelector('.appliances-arrow').addEventListener('click', (e) => {
     appliances_btn.classList.toggle('hidden')
     document.getElementById('appliancesDropDown').classList.toggle('hidden')
+  })
+
+  document.getElementById('appliancesSearchInput').addEventListener('input', (e) => {
+    const newList = appliances.filter(appliances => appliances.toLowerCase().includes(e.target.value.toLowerCase()))
+    renderAppliancesListFiltered(newList)
   })
 
 }
@@ -304,21 +371,45 @@ function renderUstensilsList(result) {
     document.getElementById('ustensilsDropDown').classList.toggle('hidden')
   })
 
+  document.getElementById('ustensilsSearchInput').addEventListener('input', (e) => {
+    const newList = ustensils.filter(ustensils => ustensils.toLowerCase().includes(e.target.value.toLowerCase()))
+    renderUstensilsListFiltered(newList)
+  })
+
 }
 
 ingredients_btn.addEventListener('click', () => {
   ingredients_btn.classList.add('hidden')
   ingredients_list.classList.toggle('hidden')
+
+  appliances_list.classList.add('hidden')
+  appliances_btn.classList.remove('hidden')
+
+  ustensils_list.classList.add('hidden')
+  ustensils_btn.classList.remove('hidden')
+
   // renderIngredientsList()
 })
 
 appliances_btn.addEventListener('click', () => {
   appliances_btn.classList.add('hidden')
   appliances_list.classList.toggle('hidden')
+
+  ingredients_list.classList.add('hidden')
+  ingredients_btn.classList.remove('hidden')
+
+  ustensils_list.classList.add('hidden')
+  ustensils_btn.classList.remove('hidden')
   // renderAppliancesList()
 })
 
 ustensils_btn.addEventListener('click', () => {
+  ingredients_list.classList.add('hidden')
+  ingredients_btn.classList.remove('hidden')
+
+  appliances_list.classList.add('hidden')
+  appliances_btn.classList.remove('hidden')
+
   ustensils_btn.classList.add('hidden')
   ustensils_list.classList.toggle('hidden')
   // renderUstensilsList(ustensils)
