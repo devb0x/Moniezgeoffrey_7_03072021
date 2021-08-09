@@ -4,7 +4,6 @@ html {
   font-size: 100%;
   font-family: $lato;
   box-sizing: border-box;
-  height: 100%;
 }
 
 *, *::before, *::after {
@@ -17,10 +16,6 @@ body {
   margin: auto;
   padding: 0;
 }
-
-//.hidden {
-//  display: none;
-//}
 
 .bg_blue {
   background-color: $blue;
