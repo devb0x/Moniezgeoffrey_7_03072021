@@ -116,6 +116,17 @@ function resetRenderRecipes() {
 }
 
 /**
+ * remove li elements from the filters list
+ */
+function resetRenderList() {
+  const items = document.querySelectorAll('.filters-results-list__item')
+
+  items.forEach(el => {
+    el.remove()
+  })
+}
+
+/**
  * render searchResult data when we use the main search form
  * @param searchResult
  */
@@ -145,6 +156,8 @@ function renderSearchResult(searchResult) {
     })
   })
   ingredientsResult = [...new Set(ingredientsResult)]
+  ingredientsList = ingredientsResult
+  console.log(ingredientsResult)
   renderIngredientsListFilter(ingredientsResult)
 
   /**
@@ -164,6 +177,7 @@ function renderSearchResult(searchResult) {
     })
   })
   ustensilsResult = [...new Set(ustensilsResult)]
+  ustensilsList = ustensilsResult
   renderUstensilsListFilter(ustensilsResult)
 
   search_form.reset()
@@ -191,6 +205,7 @@ search_form.addEventListener('submit', (e) => {
       }
     })
 
+    resetRenderList()
     renderSearchResult(searchResult)
   }
 })
@@ -202,7 +217,12 @@ search_form.addEventListener('submit', (e) => {
  */
 function addToFilterList(filter) {
   filterList.push(filter)
+  // push object category + value
+
   console.log(filterList)
+
+  // liste de functions
+
 }
 
 function renderIngredientsListFilter(searchResult) {
@@ -264,6 +284,7 @@ ingredientsFilterSearch_input.addEventListener('input', (e) => {
    */
   if (searchIngredientsInput.length < 3) {
     ingredientsList_ul.innerHTML = ''
+    renderIngredientsListFilter(ingredientsList)
   }
   /**
    * display result start at 3 character
@@ -272,7 +293,7 @@ ingredientsFilterSearch_input.addEventListener('input', (e) => {
     ingredientsList_ul.innerHTML = ''
     searchIngredientsInput.toLowerCase()
 
-    let searchResult = ingredientsList.filter(ingredientsList => ingredientsList.includes(searchIngredientsInput))
+    let searchResult = ingredientsList.filter(ingredientsList => ingredientsList.toLowerCase().includes(searchIngredientsInput))
     console.log(searchResult)
     searchResult = [...new Set(searchResult)]
 
@@ -304,6 +325,7 @@ appliancesfilterSearch_input.addEventListener('input', (e) => {
    */
   if (searchAppliancesInput.length < 3) {
     appliancesList_ul.innerHTML = ''
+    renderAppliancesListFilter(appliancesList)
   }
 
   /**
@@ -313,7 +335,7 @@ appliancesfilterSearch_input.addEventListener('input', (e) => {
     appliancesList_ul.innerHTML = ''
     searchAppliancesInput.toLowerCase()
 
-    let searchResult = appliancesList.filter(appliancesList => appliancesList.includes(searchAppliancesInput))
+    let searchResult = appliancesList.filter(appliancesList => appliancesList.toLowerCase().includes(searchAppliancesInput))
     console.log(searchResult)
     searchResult = [...new Set(searchResult)]
 
@@ -345,6 +367,7 @@ ustensilsFilterSearch_input.addEventListener('input', (e) => {
    */
   if (searchUstensilsInput.length < 3) {
     ustensilsList_ul.innerHTML = ''
+    renderUstensilsListFilter(ustensilsList)
   }
   /**
    * display result start at 3 character
@@ -353,7 +376,7 @@ ustensilsFilterSearch_input.addEventListener('input', (e) => {
     ustensilsList_ul.innerHTML = ''
     searchUstensilsInput.toLowerCase()
 
-    let searchResult = ustensilsList.filter(ustensilsList => ustensilsList.includes(searchUstensilsInput))
+    let searchResult = ustensilsList.filter(ustensilsList => ustensilsList.toLowerCase().includes(searchUstensilsInput))
     console.log(searchResult)
     searchResult = [...new Set(searchResult)]
 
@@ -377,4 +400,3 @@ fetchAllRecipes()
   .then(generateIngredientsFilter)
   .then(generateAppliancesList)
   .then(generateUstensilsList)
-
