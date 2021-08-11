@@ -5,7 +5,7 @@ const url = 'https://raw.githubusercontent.com/devb0x/Moniezgeoffrey_7_03072021/
 const search_form = document.getElementById('searchForm')
 const search_input = document.getElementById('searchFormInput')
 
-
+const filters_div = document.querySelector('.filters-list')
 
 const ingredientsFilter_btn = document.getElementById('ingredientsBtn')
 const ingredientsFilter_dropdown = document.getElementById('ingredientsDropDown')
@@ -32,6 +32,8 @@ let ingredientsList = []
 let appliancesList = []
 let ustensilsList = []
 let filterList = [] // when the user select a secondary filter, we push the value
+let newResult = []
+
 
 /**
  * push json data in Recipes[]
@@ -164,6 +166,7 @@ function renderSearchResult(searchResult) {
    * appliances result render
    */
   appliancesList = searchResult.map(el => el.appliance)
+  appliancesList = [...new Set(appliancesList)]
   renderAppliancesListFilter(appliancesList)
 
   /**
@@ -181,6 +184,22 @@ function renderSearchResult(searchResult) {
   renderUstensilsListFilter(ustensilsResult)
 
   search_form.reset()
+}
+
+function renderResultFiltered(newResult) {
+  resetRenderRecipes()
+  newResult.forEach(recipe => {
+    new Recipe(
+      recipe.id,
+      recipe.name,
+      recipe.servings,
+      recipe.ingredients,
+      recipe.time,
+      recipe.description,
+      recipe.appliance,
+      recipe.ustensils
+    ).render()
+  })
 }
 
 search_form.addEventListener('submit', (e) => {
@@ -210,18 +229,44 @@ search_form.addEventListener('submit', (e) => {
   }
 })
 
-
 /**
  * add a filter when the user select one in filter list
  * @param filter
  */
 function addToFilterList(filter) {
   filterList.push(filter)
-  // push object category + value
+  renderFilter(filter)
+}
 
-  console.log(filterList)
+/**
+ * add the filter to the DOM
+ * @param filter
+ */
+function renderFilter(filter) {
 
-  // liste de functions
+  const filter_span = document.createElement('span')
+  filter_span.classList.add('filter-item')
+  filter_span.innerHTML = `${filter.value} <i class="far fa-times-circle"></i>`
+  filters_div.append(filter_span)
+
+  if (filter.category === 'ingredient') {
+    filter_span.classList.add('btn_blue')
+  }
+
+  if (filter.category === 'appliance') {
+    filter_span.classList.add('btn_green')
+
+    searchResult.filter(el => {
+      if (el.appliance.toLowerCase().match(filter.value)) {
+        newResult.push(el)
+      }
+    })
+    renderResultFiltered(newResult)
+  }
+
+  if (filter.category === 'ustensil') {
+    filter_span.classList.add('btn_red')
+  }
 
 }
 
@@ -230,6 +275,11 @@ function renderIngredientsListFilter(searchResult) {
     const li = document.createElement('li')
     li.classList.add('filters-results-list__item')
     li.innerText = `${el}`
+
+    li.addEventListener('click', (e) => {
+      addToFilterList({category: 'ingredient', value: e.target.innerText.toLowerCase()})
+    })
+
     ingredientsList_ul.appendChild(li)
   })
 }
@@ -239,6 +289,11 @@ function renderAppliancesListFilter(searchResult) {
     const li = document.createElement('li')
     li.classList.add('filters-results-list__item')
     li.innerText = `${el}`
+
+    li.addEventListener('click', (e) => {
+      addToFilterList({category: 'appliance', value: e.target.innerText.toLowerCase()})
+    })
+
     appliancesList_ul.appendChild(li)
   })
 }
@@ -250,7 +305,7 @@ function renderUstensilsListFilter(searchResult) {
     li.innerText = `${el}`
 
     li.addEventListener('click', (e) => {
-      addToFilterList(e.target.innerText.toLowerCase())
+      addToFilterList({category: 'ustensil', value: e.target.innerText.toLowerCase()})
     })
 
     ustensilsList_ul.appendChild(li)
