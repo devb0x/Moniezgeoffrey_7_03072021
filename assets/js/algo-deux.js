@@ -34,7 +34,6 @@ let ustensilsList = []
 let filterList = [] // when the user select a secondary filter, we push the value
 let newResult = []
 
-
 /**
  * push json data in Recipes[]
  * @returns {Promise<any>}
@@ -80,7 +79,6 @@ function generateIngredientsFilter() {
     ingredientsList.push(el.ingredient.toLowerCase())
   }))
   ingredientsList = [...new Set(ingredientsList)]
-  console.warn(ingredientsList)
 }
 
 /**
@@ -89,7 +87,6 @@ function generateIngredientsFilter() {
 function generateAppliancesList() {
   appliancesList = recipes.map(recipes => recipes.appliance.toLowerCase())
   appliancesList = [...new Set(appliancesList)]
-  console.warn(appliancesList)
 }
 
 /**
@@ -100,7 +97,6 @@ function generateUstensilsList() {
     ustensilsList.push(el.toLowerCase())
   }))
   ustensilsList = [...new Set(ustensilsList)]
-  console.warn(ustensilsList)
 }
 
 /**
@@ -159,7 +155,6 @@ function renderSearchResult(searchResult) {
   })
   ingredientsResult = [...new Set(ingredientsResult)]
   ingredientsList = ingredientsResult
-  console.log(ingredientsResult)
   renderIngredientsListFilter(ingredientsResult)
 
   /**
@@ -251,21 +246,67 @@ function renderFilter(filter) {
 
   if (filter.category === 'ingredient') {
     filter_span.classList.add('btn_blue')
+
+    searchResult.filter(el => {
+      el.ingredients.forEach(item => {
+        if (item.ingredient.toLowerCase().match(filter.value)) {
+          newResult.push(el)
+        }
+      })
+    })
+    renderResultFiltered(newResult)
+  }
+
+  // if (filter.category === 'appliance') {
+  //   filter_span.classList.add('btn_green')
+  //
+  //   searchResult.filter(el => {
+  //     if (el.appliance.toLowerCase().match(filter.value)) {
+  //       newResult.push(el)
+  //     }
+  //   })
+  //   renderResultFiltered(newResult)
+  // }
+
+  if (filter.category === 'ustensil') {
+    filter_span.classList.add('btn_red')
+
+    searchResult.filter(el => {
+      el.ustensils.forEach(ustensil => {
+        if (ustensil.toLowerCase().match(filter.value)) {
+          newResult.push(el)
+        }
+      })
+    })
+    renderResultFiltered(newResult)
   }
 
   if (filter.category === 'appliance') {
     filter_span.classList.add('btn_green')
 
-    searchResult.filter(el => {
-      if (el.appliance.toLowerCase().match(filter.value)) {
-        newResult.push(el)
-      }
-    })
-    renderResultFiltered(newResult)
-  }
+    // newResult = searchResult.filter(el => {
+    //   if (el.appliance.toLowerCase().match(filter.value)) {
+    //     return true
+    //   } else {
+    //     return false
+    //   }
+    // })
 
-  if (filter.category === 'ustensil') {
-    filter_span.classList.add('btn_red')
+      // console.log(filterList)
+        // console.log(filter.value) //ok
+      filterList.forEach(filter => {
+        newResult = searchResult.filter(el => {
+          if (el.appliance.toLowerCase().match(filter.value)) {
+          console.log(newResult)
+          // console.table(el)
+            return true
+          } else {
+            return false
+          }
+        })
+      })
+    resetRenderRecipes()
+    renderResultFiltered(newResult)
   }
 
 }
