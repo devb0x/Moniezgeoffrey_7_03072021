@@ -268,18 +268,18 @@ function renderFilter(filter) {
   //   renderResultFiltered(newResult)
   // }
 
-  if (filter.category === 'ustensil') {
-    filter_span.classList.add('btn_red')
-
-    searchResult.filter(el => {
-      el.ustensils.forEach(ustensil => {
-        if (ustensil.toLowerCase().match(filter.value)) {
-          newResult.push(el)
-        }
-      })
-    })
-    renderResultFiltered(newResult)
-  }
+  // if (filter.category === 'ustensil') {
+  //   filter_span.classList.add('btn_red')
+  //
+  //   searchResult.filter(el => {
+  //     el.ustensils.forEach(ustensil => {
+  //       if (ustensil.toLowerCase().match(filter.value)) {
+  //         newResult.push(el)
+  //       }
+  //     })
+  //   })
+  //   renderResultFiltered(newResult)
+  // }
 
   if (filter.category === 'appliance') {
     filter_span.classList.add('btn_green')
@@ -292,21 +292,36 @@ function renderFilter(filter) {
     //   }
     // })
 
-      // console.log(filterList)
-        // console.log(filter.value) //ok
-      filterList.forEach(filter => {
-        newResult = searchResult.filter(el => {
-          if (el.appliance.toLowerCase().match(filter.value)) {
-          console.log(newResult)
-          // console.table(el)
+    filterList.forEach(filter => {
+        searchResult = searchResult.filter(recipe => {
+          if (recipe.appliance.toLowerCase().includes(filter.value)) {
+            return true
+          } else {
+            return false
+          }
+        })
+    })
+    resetRenderRecipes()
+    renderResultFiltered(searchResult)
+  }
+
+  if (filter.category === 'ustensil') {
+    filter_span.classList.add('btn_red')
+
+    filterList.forEach(filter => {
+      searchResult = searchResult.filter(recipe => {
+        recipe.ustensils.forEach(el => {
+          if (el.toLowerCase().includes(filter.value)) {
+            console.log(recipe)
             return true
           } else {
             return false
           }
         })
       })
+    })
     resetRenderRecipes()
-    renderResultFiltered(newResult)
+    renderResultFiltered(searchResult)
   }
 
 }
