@@ -244,18 +244,18 @@ function renderFilter(filter) {
   filter_span.innerHTML = `${filter.value} <i class="far fa-times-circle"></i>`
   filters_div.append(filter_span)
 
-  if (filter.category === 'ingredient') {
-    filter_span.classList.add('btn_blue')
-
-    searchResult.filter(el => {
-      el.ingredients.forEach(item => {
-        if (item.ingredient.toLowerCase().match(filter.value)) {
-          newResult.push(el)
-        }
-      })
-    })
-    renderResultFiltered(newResult)
-  }
+  // if (filter.category === 'ingredient') {
+  //   filter_span.classList.add('btn_blue')
+  //
+  //   searchResult.filter(el => {
+  //     el.ingredients.forEach(item => {
+  //       if (item.ingredient.toLowerCase().match(filter.value)) {
+  //         newResult.push(el)
+  //       }
+  //     })
+  //   })
+  //   renderResultFiltered(newResult)
+  // }
 
   // if (filter.category === 'appliance') {
   //   filter_span.classList.add('btn_green')
@@ -280,50 +280,102 @@ function renderFilter(filter) {
   //   })
   //   renderResultFiltered(newResult)
   // }
+  // if (filter.category === 'ingredient') {
+  //   filter_span.classList.add('btn_blue')
+  //
+  //   filterList.forEach(filter => {
+  //     searchResult = searchResult.filter(recipe => {
+  //       return recipe.ingredients.some(ingredient => {
+  //         if (ingredient.ingredient.toLowerCase().includes(filter.value)) {
+  //           return recipe
+  //         }
+  //       })
+  //     })
+  //   })
+  //   resetRenderRecipes()
+  //   renderResultFiltered(searchResult)
+  // }
 
-  if (filter.category === 'appliance') {
-    filter_span.classList.add('btn_green')
+  // if (filter.category === 'appliance') {
+  //   filter_span.classList.add('btn_green')
+  //
+  //   filterList.forEach(filter => {
+  //       searchResult = searchResult.filter(recipe => {
+  //         return recipe.appliance.toLowerCase().includes(filter.value);
+  //       })
+  //   })
+  //   resetRenderRecipes()
+  //   renderResultFiltered(searchResult)
+  // }
+  //
+  // if (filter.category === 'ustensil') {
+  //   filter_span.classList.add('btn_red')
+  //
+  //   filterList.forEach(filter => {
+  //     searchResult = searchResult.filter(recipe => {
+  //       return recipe.ustensils.some(ustensil => {
+  //         if (ustensil.toLowerCase().includes(filter.value)) {
+  //           return recipe
+  //         }
+  //       })
+  //     })
+  //   })
+  //   resetRenderRecipes()
+  //   renderResultFiltered(searchResult)
+  // }
 
-    // newResult = searchResult.filter(el => {
-    //   if (el.appliance.toLowerCase().match(filter.value)) {
-    //     return true
-    //   } else {
-    //     return false
-    //   }
-    // })
 
-    filterList.forEach(filter => {
+  console.log(filterList)
+  filterList.forEach(filterItem => {
+    if (filterItem.category === 'ingredient') {
+      filterList.forEach(filter => {
         searchResult = searchResult.filter(recipe => {
-          if (recipe.appliance.toLowerCase().includes(filter.value)) {
-            return true
-          } else {
-            return false
-          }
-        })
-    })
-    resetRenderRecipes()
-    renderResultFiltered(searchResult)
-  }
-
-  if (filter.category === 'ustensil') {
-    filter_span.classList.add('btn_red')
-
-    filterList.forEach(filter => {
-      searchResult = searchResult.filter(recipe => {
-        recipe.ustensils.forEach(el => {
-          if (el.toLowerCase().includes(filter.value)) {
-            console.log(recipe)
-            return true
-          } else {
-            return false
-          }
+          return recipe.ingredients.some(ingredient => {
+            if (ingredient.ingredient.toLowerCase().includes(filter.value)) {
+              return recipe
+            }
+          })
         })
       })
-    })
-    resetRenderRecipes()
-    renderResultFiltered(searchResult)
-  }
+    }
 
+    if (filterItem.category === 'appliance') {
+      filterList.forEach(filter => {
+        searchResult = searchResult.filter(recipe => {
+          return recipe.appliance.toLowerCase().includes(filter.value);
+        })
+      })
+    }
+
+    if (filterItem.category === 'ustensil') {
+      filterList.forEach(filter => {
+        searchResult = searchResult.filter(recipe => {
+          return recipe.ustensils.some(ustensil => {
+            if (ustensil.toLowerCase().includes(filter.value)) {
+              return recipe
+            }
+          })
+        })
+      })
+    }
+  })
+
+  resetRenderRecipes()
+  renderResultFiltered(searchResult)
+}
+
+function renderRecipe(recipe) {
+  console.warn('test')
+  new Recipe(
+    recipe.id,
+    recipe.name,
+    recipe.servings,
+    recipe.ingredients,
+    recipe.time,
+    recipe.description,
+    recipe.appliance,
+    recipe.ustensils
+  ).render()
 }
 
 function renderIngredientsListFilter(searchResult) {
