@@ -6,6 +6,7 @@ const search_form = document.getElementById('searchForm')
 const search_input = document.getElementById('searchFormInput')
 
 const filters_div = document.querySelector('.filters-list')
+const filterItem_i = document.querySelectorAll('.fa-times-circle')
 
 const ingredientsFilter_btn = document.getElementById('ingredientsBtn')
 const ingredientsFilter_dropdown = document.getElementById('ingredientsDropDown')
@@ -116,7 +117,7 @@ function resetRenderRecipes() {
 /**
  * remove li elements from the filters list
  */
-function resetRenderList() {
+function resetRenderSecondaryList() {
   const items = document.querySelectorAll('.filters-results-list__item')
 
   items.forEach(el => {
@@ -181,9 +182,9 @@ function renderSearchResult(searchResult) {
   search_form.reset()
 }
 
-function renderResultFiltered(searchResult) {
+function renderResultFiltered(newResult) {
   resetRenderRecipes()
-  searchResult.forEach(recipe => {
+  newResult.forEach(recipe => {
     new Recipe(
       recipe.id,
       recipe.name,
@@ -195,11 +196,56 @@ function renderResultFiltered(searchResult) {
       recipe.ustensils
     ).render()
   })
+
+  resetRenderSecondaryList()
+  /**
+   * ingredients result render
+   */
+  let ingredientsResult = []
+  newResult.forEach(recipe => {
+    recipe.ingredients.forEach(ingredient => {
+      ingredientsResult.push(ingredient.ingredient)
+    })
+  })
+  ingredientsResult = [...new Set(ingredientsResult)]
+
+  renderIngredientsListFilter(ingredientsResult)
+
+  /**
+   * appliances result render
+   */
+  let appliancesResult = []
+  newResult.forEach(recipe => {
+    appliancesResult.push(recipe.appliance)
+  })
+  appliancesResult = [...new Set(appliancesResult)]
+  renderAppliancesListFilter(appliancesResult)
+
+  /**
+   * ustensils result render
+   */
+  let ustensilsResult = []
+  newResult.forEach(recipe => {
+    recipe.ustensils.forEach(ustensil => {
+      ustensilsResult.push(ustensil)
+    })
+  })
+  ustensilsResult = [...new Set(ustensilsResult)]
+  renderUstensilsListFilter(ustensilsResult)
 }
 
+/**
+ * Main research event submit
+ */
 search_form.addEventListener('submit', (e) => {
   e.preventDefault()
   console.log(search_input.value)
+
+  /**
+   * reset the filterList
+   * @type {*[]}
+   */
+  // filterList = []
 
   /**
    * the research start at 3 character
@@ -219,7 +265,7 @@ search_form.addEventListener('submit', (e) => {
       }
     })
 
-    resetRenderList()
+    resetRenderSecondaryList()
     renderSearchResult(searchResult)
   }
 })
@@ -262,7 +308,7 @@ function renderFilter(filter, btnClass) {
           return recipe.appliance.toLowerCase().includes(filter.value);
         })
         break
-      case ('ustensils'):
+      case ('ustensil'):
         newResult = searchResult.filter(recipe => {
           return recipe.ustensils.some(ustensil => {
             if (ustensil.toLowerCase().includes(filter.value)) {
@@ -273,10 +319,16 @@ function renderFilter(filter, btnClass) {
     }
   })
 
+  // document.querySelector('.fa-times-circle').addEventListener('click', (e) => {
+  //   console.log('clic')
+  //   console.log(e.target.value)
+  // })
+
   console.table(newResult)
 
   resetRenderRecipes()
   renderResultFiltered(newResult)
+
 }
 
 function renderIngredientsListFilter(ingredientsResult) {
