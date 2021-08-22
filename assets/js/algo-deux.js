@@ -6,7 +6,7 @@ const search_form = document.getElementById('searchForm')
 const search_input = document.getElementById('searchFormInput')
 
 const filters_div = document.querySelector('.filters-list')
-const filterItem_i = document.querySelectorAll('.fa-times-circle')
+// const filterItem_i = document.querySelectorAll('.fa-times-circle')
 
 const ingredientsFilter_btn = document.getElementById('ingredientsBtn')
 const ingredientsFilter_dropdown = document.getElementById('ingredientsDropDown')
@@ -148,7 +148,6 @@ function renderSearchResult(searchResult) {
    * ingredients result render
    */
   let ingredientsResult = []
-  console.log(searchResult)
   searchResult.forEach(recipe => {
     recipe.ingredients.forEach(ingredient => {
       ingredientsResult.push(ingredient.ingredient)
@@ -245,7 +244,7 @@ search_form.addEventListener('submit', (e) => {
    * reset the filterList
    * @type {*[]}
    */
-  // filterList = []
+  filterList = []
 
   /**
    * the research start at 3 character
@@ -281,12 +280,9 @@ function addToFilterList(filter) {
 /**
  * add the filter to the DOM
  * @param filter
+ * @param btnClass
  */
 function renderFilter(filter, btnClass) {
-  console.log(filterList)
-  console.log('searchResult = ')
-  console.log(searchResult)
-
   const filter_span = document.createElement('span')
   filter_span.classList.add('filter-item', btnClass)
   filter_span.innerHTML = `${filter.value} <i class="far fa-times-circle"></i>`
@@ -319,15 +315,20 @@ function renderFilter(filter, btnClass) {
     }
   })
 
-  // document.querySelector('.fa-times-circle').addEventListener('click', (e) => {
-  //   console.log('clic')
-  //   console.log(e.target.value)
-  // })
-
-  console.table(newResult)
-
   resetRenderRecipes()
   renderResultFiltered(newResult)
+
+  const filterItem_i = document.querySelectorAll('.fa-times-circle')
+
+  if (filterItem_i) {
+    filterItem_i.forEach(el => el.addEventListener('click', (e) => {
+      let filterValue = e.target.parentNode.innerText.toLowerCase()
+      e.target.parentNode.remove() // remove from dom ok
+      filterList = filterList.filter(item => {
+        return item.value !== filterValue
+      })
+    }))
+  }
 
 }
 
@@ -413,7 +414,6 @@ ingredientsFilterSearch_input.addEventListener('input', (e) => {
     searchIngredientsInput.toLowerCase()
 
     let ingredientsSearchResult = ingredientsList.filter(ingredientsList => ingredientsList.toLowerCase().includes(searchIngredientsInput))
-    console.log(searchResult)
     ingredientsSearchResult = [...new Set(ingredientsSearchResult)]
 
     renderIngredientsListFilter(ingredientsSearchResult)
@@ -502,6 +502,18 @@ ustensilsFilterSearch_input.addEventListener('input', (e) => {
     renderUstensilsListFilter(ustensilsSearchResult)
   }
 })
+
+
+// document.querySelector('.fa-times-circle').addEventListener('click', (e) => {
+//   let filterValue = e.target.parentNode.innerText.toLowerCase()
+//   console.log('clic : ' + filterValue)
+//   console.log(e.target.parentNode.remove()) // remove from dom ok
+//   console.log(filterList)
+//   filterList = filterList.filter(item => {
+//     item.value.match(!filterValue)
+//   })
+//   console.log(filterList)
+// })
 
 fetchAllRecipes()
   .then(renderAllRecipes)
