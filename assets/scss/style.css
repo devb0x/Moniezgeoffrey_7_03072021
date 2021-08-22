@@ -3,7 +3,6 @@ html {
   font-size: 100%;
   font-family: "Lato", sans-serif;
   box-sizing: border-box;
-  height: 100%;
 }
 
 *, *::before, *::after {
@@ -45,6 +44,10 @@ body {
   flex-wrap: wrap;
   margin: 0 2rem 0 0;
   border-radius: 5px;
+}
+
+.btn_black {
+  background-color: black;
 }
 
 .btn_blue {
@@ -237,6 +240,8 @@ input {
 }
 .filters-results-list__item {
   width: 33%;
+  color: white;
+  cursor: pointer;
 }
 .filters-results-list__item > a {
   text-decoration: none;

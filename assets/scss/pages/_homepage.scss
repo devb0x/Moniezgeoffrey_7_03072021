@@ -109,6 +109,8 @@ input {
 
     &__item {
       width: 33%;
+      color: white;
+      cursor: pointer;
 
       & > a {
         text-decoration: none;
