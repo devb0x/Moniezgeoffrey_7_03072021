@@ -2,33 +2,44 @@ import { Recipe } from "./Recipe.js";
 
 const url = 'https://raw.githubusercontent.com/devb0x/Moniezgeoffrey_7_03072021/master/assets/recipes.json'
 
-const search_input = document.getElementById('searchFormInput')
 const search_form = document.getElementById('searchForm')
+const search_input = document.getElementById('searchFormInput')
 
 const filters_div = document.querySelector('.filters-list')
+// const filterItem_i = document.querySelectorAll('.fa-times-circle')
 
-const ingredients_btn = document.getElementById('ingredientsBtn')
-const ingredients_list = document.getElementById('ingredientsDropDown')
+const ingredientsFilter_btn = document.getElementById('ingredientsBtn')
+const ingredientsFilter_dropdown = document.getElementById('ingredientsDropDown')
+const ingredientsFilterSearch_input = document.getElementById('ingredientsSearchInput')
+const ingredientsFilterSearch_arrow = document.querySelector('.ingredients-arrow')
+const ingredientsList_ul = document.querySelector('.ingredients-list')
 
-const appliances_btn = document.getElementById('appliancesBtn')
-const appliances_list = document.getElementById('appliancesDropDown')
+const appliancesFilter_btn = document.getElementById('appliancesBtn')
+const appliancesFilter_dropdown = document.getElementById('appliancesDropDown')
+const appliancesFilterSearch_input = document.getElementById('appliancesSearchInput')
+const appliancesFilterSearch_arrow = document.querySelector('.appliances-arrow')
+const appliancesList_ul = document.querySelector('.appliances-list')
 
-const ustensils_btn = document.getElementById('ustensilsBtn')
-const ustensils_list = document.getElementById('ustensilsDropDown')
+const ustensilsFilter_btn = document.getElementById('ustensilsBtn')
+const ustensilsFilter_dropdown = document.getElementById('ustensilsDropDown')
+const ustensilsFilterSearch_input = document.getElementById('ustensilsSearchInput')
+const ustensilsFilterSearch_arrow = document.querySelector('.ustensils-arrow')
+const ustensilsList_ul = document.querySelector('.ustensils-list')
 
-const test = document.getElementById('reset')
+
+
+let recipesList = []
+let ingredientsList = []
+let appliancesList = []
+let ustensilsList =[]
+let filterList = []
+
 
 /**
- * data with all recipes
- * @type {*[]}
+ * recipesList[]
+ * fetch & push json data
+ * @returns {Promise<any>}
  */
-let recipes = []
-let filtersList = []
-
-let appliances = []
-let ustensils = []
-let ingredients = []
-
 function fetchAllRecipes() {
   return fetch(`${url}`)
     .then(response => {
@@ -39,76 +50,16 @@ function fetchAllRecipes() {
     })
     .then(data => {
       data.recipes.forEach(el => {
-        recipes.push(el)
+        recipesList.push(el)
       })
     })
 }
 
-search_form.addEventListener('submit', (e) => {
-  e.preventDefault()
-
-  // search = []
-  appliances = []
-  ustensils = []
-  ingredients = []
-  /**
-   * search start at 3 characters
-   */
-  if (search_input.value && search_input.value.length >= 3) {
-    let searchInput = search_input.value.toLowerCase()
-    console.log('form submited with this value: ' + searchInput)
-    const result = recipes.filter(el => {
-      if (el.name.toLowerCase().includes(searchInput)
-        || el.description.toLowerCase().includes(searchInput)
-        || el.ingredients.forEach(ingredient => {
-          ingredient.ingredient.toLowerCase().includes(searchInput)
-        })
-      ) {
-        return true
-      } else {
-        return false
-      }
-    })
-
-    resetRenderRecipes()
-    resetRenderFilters()
-    renderFilter(searchInput)
-    renderSearch(result)
-
-    renderIngredientsList(result)
-    renderAppliancesList(result)
-    renderUstensilsList(result)
-
-    search_form.reset()
-  }
-})
-
-fetchAllRecipes()
-  .then(renderAllRecipes)
-  .then(focus)
-
-function resetRenderRecipes() {
-  const recipes = document.querySelectorAll('.recipe')
-
-  if (recipes) {
-    recipes.forEach(el => {
-      el.remove()
-    })
-  }
-}
-
-function resetRenderFilters() {
-  const filters = document.querySelectorAll('.filter-item')
-
-  if (filters) {
-    filters.forEach(el => {
-      el.remove()
-    })
-  }
-}
-
-function renderAllRecipes() {
-  recipes.forEach(el => {
+/**
+ * render all data in recipesList[]
+ */
+function renderRecipes() {
+  recipesList.forEach(el => {
     new Recipe(
       el.id,
       el.name,
@@ -123,351 +74,451 @@ function renderAllRecipes() {
 }
 
 /**
- * add the filter under the input search
- * @param filter
+ * render function used when the user type or submit the form
+ * @param searchResult
  */
-function renderFilter(filter) {
-  const filter_span = document.createElement('span')
-  filter_span.classList.add('filter-item', 'btn_black')
-  filter_span.innerHTML = `${filter} <i class="far fa-times-circle"></i>`
-  filters_div.append(filter_span)
+function renderResult(searchResult) {
+  searchResult.forEach(el => {
+    new Recipe(
+      el.id,
+      el.name,
+      el.servings,
+      el.ingredients,
+      el.time,
+      el.description,
+      el.appliance,
+      el.ustensils
+    ).render()
+  })
 }
 
-function renderUstensilFilter (filter) {
+/**
+ * target all the .recipe and
+ * remove them from the .recipes section
+ */
+function resetRenderRecipes() {
+  const recipes = document.querySelectorAll('.recipe')
+
+  if (recipes) {
+    recipes.forEach(el => {
+      el.remove()
+    })
+  }
+}
+
+/**
+ * function filtering recipes from name, description, or ingredients
+ * @param recipesList
+ * @param value
+ * @returns {*}
+ */
+function search(recipesList, value) {
+  return recipesList.filter((recipe) => {
+    return (
+      recipe.name.toLowerCase().includes(value.toLowerCase()) ||
+      recipe.description.toLowerCase().includes(value.toLowerCase()) ||
+      recipe.ingredients.some((ingredientObj) =>
+        ingredientObj.ingredient.toLowerCase().includes(value.toLowerCase())
+      )
+    );
+  });
+}
+
+/**
+ * ingredientsList[]
+ * push data from reipesList
+ */
+function generateIngredientsList() {
+  recipesList.filter(recipes => recipes.ingredients.forEach(el => {
+    ingredientsList.push(el.ingredient.toLowerCase())
+  }))
+  ingredientsList = [...new Set(ingredientsList)]
+}
+
+/**
+ * appliancesList[]
+ * push data from reipesList
+ */
+function generateAppliancesList() {
+  recipesList.filter(recipe =>
+    appliancesList.push(recipe.appliance.toLowerCase())
+  )
+  appliancesList = [...new Set(appliancesList)]
+}
+
+/**
+ * ustensilsList[]
+ * push data from reipesList
+ */
+function generateUstensilsList() {
+  recipesList.filter(recipes => recipes.ustensils.forEach(el => {
+    ustensilsList.push(el.toLowerCase())
+  }))
+  ustensilsList = [...new Set(ustensilsList)]
+}
+
+/**
+ * add a filter when the user select one in filter list
+ * @param filter
+ */
+function addToFilterList(filter) {
+  filterList.push(filter)
+}
+
+function renderFilter(filter, btnClass) {
   const filter_span = document.createElement('span')
-  filter_span.classList.add('filter-item', 'btn_red')
-  filter_span.innerHTML = `${filter} <i class="far fa-times-circle"></i>`
+  filter_span.classList.add('filter-item', btnClass)
+  filter_span.innerHTML = `${filter.value} <i class="far fa-times-circle filter-test"></i>`
   filters_div.append(filter_span)
 }
 
 /**
- * render the recipes data inside search[],
- * when the user use the main research input
+ * ingredientsList[]
  */
-function renderSearch(list) {
-  resetRenderRecipes()
-  if (filtersList.length === 0) {
-    list.forEach(recipe => {
-      new Recipe(
-        recipe.id,
-        recipe.name,
-        recipe.servings,
-        recipe.ingredients,
-        recipe.time,
-        recipe.description,
-        recipe.appliance,
-        recipe.ustensils
-      ).render()
+function renderIngredientsList() {
+  ingredientsList.forEach(el => {
+    const li = document.createElement('li')
+    li.classList.add('filters-results-list__item')
+    li.innerText = `${el}`
+
+    /**
+     * add filter & render it
+     * @event clic
+     */
+    li.addEventListener('click', (e) => {
+      addToFilterList({category: 'ingredient', value: e.target.innerText.toLowerCase()})
+      renderFilter({category: 'ingredient', value: e.target.innerText.toLowerCase()}, 'btn_blue')
+      filterRecipes(recipesList, e.target.innerText.toLowerCase())
     })
+
+    ingredientsList_ul.appendChild(li)
+  })
+}
+
+/**
+ * appliancesList[]
+ */
+function renderAppliancesList() {
+  appliancesList.forEach(el => {
+    const li = document.createElement('li')
+    li.classList.add('filters-results-list__item')
+    li.innerText = `${el}`
+
+    li.addEventListener('click', (e) => {
+      addToFilterList({category: 'appliance', value: e.target.innerText.toLowerCase()})
+      renderFilter({category: 'appliance', value: e.target.innerText.toLowerCase()}, 'btn_green')
+      filterRecipes(recipesList, e.target.innerText.toLowerCase())
+    })
+
+    appliancesList_ul.appendChild(li)
+  })
+}
+
+/**
+ * ustensilsList[]
+ */
+function renderUstensilsList() {
+  ustensilsList.forEach(el => {
+    const li = document.createElement('li')
+    li.classList.add('filters-results-list__item')
+    li.innerText = `${el}`
+
+    li.addEventListener('click', (e) => {
+      addToFilterList({category: 'ustensil', value: e.target.innerText.toLowerCase()})
+      renderFilter({category: 'ustensil', value: e.target.innerText.toLowerCase()}, 'btn_red')
+      filterRecipes(recipesList, e.target.innerText.toLowerCase())
+    })
+
+    ustensilsList_ul.appendChild(li)
+  })
+}
+
+function renderIngredientsListFilter(ingredientsSearchResult) {
+  ingredientsSearchResult.forEach(el => {
+    const li = document.createElement('li')
+    li.classList.add('filters-results-list__item')
+    li.innerText = `${el}`
+
+    li.addEventListener('click', (e) => {
+      addToFilterList({category: 'ingredient', value: e.target.innerText.toLowerCase()})
+      renderFilter({category: 'ingredient', value: e.target.innerText.toLowerCase()}, 'btn_blue')
+      filterRecipes(recipesList, e.target.innerText.toLowerCase())
+    })
+
+    ingredientsList_ul.appendChild(li)
+  })
+}
+
+function renderAppliancesListFiltered(appliancesSearchResult) {
+  appliancesSearchResult.forEach(el => {
+    const li = document.createElement('li')
+    li.classList.add('filters-results-list__item')
+    li.innerText = `${el}`
+
+    li.addEventListener('click', (e) => {
+      addToFilterList({category: 'appliance', value: e.target.innerText.toLowerCase()})
+      renderFilter({category: 'appliance', value: e.target.innerText.toLowerCase()}, 'btn_green')
+      filterRecipes(recipesList, e.target.innerText.toLowerCase())
+    })
+
+    appliancesList_ul.appendChild(li)
+  })
+}
+
+function renderUstensilsListFiltered(ustensilsSearchResult) {
+  ustensilsSearchResult.forEach(el => {
+    const li = document.createElement('li')
+    li.classList.add('filters-results-list__item')
+    li.innerText = `${el}`
+
+    li.addEventListener('click', (e) => {
+      addToFilterList({category: 'ustensil', value: e.target.innerText.toLowerCase()})
+      renderFilter({category: 'ustensil', value: e.target.innerText.toLowerCase()}, 'btn_red')
+      filterRecipes(recipesList, e.target.innerText.toLowerCase())
+    })
+
+    ustensilsList_ul.appendChild(li)
+  })
+}
+
+/**
+ * filter recip
+ * @param recipeList
+ * @param value
+ */
+function filterRecipes(recipeList, value) {
+  let newResult = recipeList
+
+  filterList.forEach(filterItem => {
+    switch (filterItem.category) {
+      case ('ingredient'):
+        newResult = newResult.filter(recipe => {
+          return recipe.ingredients.some(ingredient => {
+            if (ingredient.ingredient.toLowerCase().includes(filterItem.value)) {
+              return recipe
+            }
+          })
+        })
+        break
+      case ('appliance'):
+        newResult = newResult.filter(recipe => {
+          return recipe.appliance.toLowerCase().includes(filterItem.value);
+        })
+        break
+      case ('ustensil'):
+        newResult = newResult.filter(recipe => {
+          return recipe.ustensils.some(ustensil => {
+            if (ustensil.toLowerCase().includes(filterItem.value)) {
+              return recipe
+            }
+          })
+        })
+    }
+  })
+
+  resetRenderRecipes()
+  renderResult(newResult)
+  addEventFilter()
+}
+
+/**
+ * @event click
+ */
+function addEventFilter() {
+  const filterItem_i = document.querySelectorAll('.fa-times-circle')
+
+  if (filterItem_i) {
+    filterItem_i.forEach(el => el.addEventListener('click', (e) => {
+      let filterValue = e.target.parentNode.innerText.toLowerCase()
+      e.target.parentNode.remove()
+      filterList = filterList.filter(item => {
+        return item.value !== filterValue
+      })
+      resetRenderRecipes()
+      filterRecipes(recipesList)
+    }))
+  }
+}
+
+/**
+ * Main research
+ * @event input
+ */
+search_form.addEventListener('input', (e) => {
+  e.preventDefault()
+
+  /**
+   * the research start at 3 character
+   */
+  if (search_input.value && search_input.value.length > 2) {
+    let searchResult = search(recipesList, search_input.value)
+    resetRenderRecipes()
+    renderResult(searchResult)
+  }
+})
+
+/**
+ * Main research
+ * @event submit
+ */
+search_form.addEventListener('submit', (e) => {
+  e.preventDefault()
+  search_input.blur()
+  if (search_input.value && search_input.value.length > 2) {
+    let searchResult = search(recipesList, search_input.value)
+    resetRenderRecipes()
+    renderResult(searchResult)
+    // renderIngredientsList()
+  }
+})
+
+/**
+ * for Ingredients
+ * hide button & display filters list with input field
+ */
+function toggleDisplayIngredientsListFilter() {
+  ingredientsFilter_btn.classList.toggle('hidden')
+  ingredientsFilter_dropdown.classList.toggle('hidden')
+}
+
+/**
+ * for Appareils
+ * hide button & display filters list with input field
+ */
+function toggleDisplayAppliancesFilter() {
+  appliancesFilter_btn.classList.toggle('hidden')
+  appliancesFilter_dropdown.classList.toggle('hidden')
+}
+
+/**
+ * for Ustensiles
+ * hide button & display filters list with input field
+ */
+function toggleDisplayUstensilsFilter() {
+  ustensilsFilter_btn.classList.toggle('hidden')
+  ustensilsFilter_dropdown.classList.toggle('hidden')
+}
+
+/**
+ * ingredients button
+ * display list of filters
+ * @event clic
+ */
+ingredientsFilter_btn.addEventListener('click', (e) => {
+  toggleDisplayIngredientsListFilter()
+  renderIngredientsList()
+})
+
+ingredientsFilterSearch_arrow.addEventListener('click', (e) => {
+  toggleDisplayIngredientsListFilter()
+})
+
+/**
+ * ingredients filter search
+ * @event input
+ */
+ingredientsFilterSearch_input.addEventListener('input', (e) => {
+  let searchIngredientsInput = e.target.value.toLowerCase()
+
+  if (searchIngredientsInput.length < 3) {
+    ingredientsList_ul.innerHTML = ''
+    renderIngredientsList()
   }
 
-  filtersList.forEach(filter =>
-    recipes.filter(recipe => {
-      if (recipe.ustensils.includes(filter)
-        || recipe.appliance.includes(filter)
-        || recipe.ingredients.includes(filter)) {
-        new Recipe(
-          recipe.id,
-          recipe.name,
-          recipe.servings,
-          recipe.ingredients,
-          recipe.time,
-          recipe.description,
-          recipe.appliance,
-          recipe.ustensils
-        ).render()
-      }
-    })
-  )
-  renderIngredientsList(list)
-  renderUstensilsList(list)
-  renderAppliancesList(list)
-}
+  if (searchIngredientsInput.length > 2) {
+    ingredientsList_ul.innerHTML = ''
 
-function renderIngredientsList(result) {
-  let ingredients = result.map(el => el.ingredients)
-  // console.log(ingredients)
+    let ingredientsSearchResult = ingredientsList.filter(ingredientsList => ingredientsList.toLowerCase()
+      .includes(searchIngredientsInput))
+    ingredientsSearchResult = [...new Set(ingredientsSearchResult)]
 
-  let list = []
-  ingredients.forEach(el => {
-    el.forEach(ingredient => {
-      list.push(ingredient.ingredient)
-    })
-  })
-  // console.log(list)
-  ingredients = [...new Set(list)]
-  // console.warn(ingredients)
-
-  ingredients_list.innerHTML = `
-      <label for="ingredientsSearchInput"></label>
-      <div class="dropdown-content__input">
-        <input type="text" id="ingredientsSearchInput" placeholder="Rechercher un ingrédient">
-        <i class="fas fa-chevron-down dropdown-content__arrow ingredients-arrow"></i>    
-      </div>
-      
-      <div class="filters-results">
-        <ul class="filters-results-list ingredients-list"></ul>
-      </div>
-  `
-  ingredients.forEach(el => {
-    const li = document.createElement('li')
-    li.classList.add('filters-results-list__item')
-    const link = document.createElement('a')
-    link.classList.add('filters-results-list__item-link')
-    link.href = '#'
-    link.innerText = `${el}`
-    li.appendChild(link)
-    document.querySelector('.ingredients-list').appendChild(li)
-  })
-
-  document.querySelector('.ingredients-arrow').addEventListener('click', (e) => {
-    ingredients_btn.classList.toggle('hidden')
-    document.getElementById('ingredientsDropDown').classList.toggle('hidden')
-  })
-
-  document.getElementById('ingredientsSearchInput').addEventListener('input', (e) => {
-    // console.log(e.target.value)
-    const newList = ingredients.filter(ingredients => ingredients.toLowerCase().includes(e.target.value.toLowerCase()))
-    console.log(newList)
-    renderIngredientsListFiltered(newList)
-  })
-
-}
-
-function renderIngredientsListFiltered(newList) {
-  console.log(newList)
-  const ingredientsList = document.querySelector('.ingredients-list').innerHTML = ''
-
-  console.log(ingredientsList)
-  newList.forEach(el => {
-    const li = document.createElement('li')
-    li.classList.add('filters-results-list__item')
-    const link = document.createElement('a')
-    link.classList.add('filters-results-list__item-link')
-    link.href = '#'
-    link.innerText = `${el}`
-    li.appendChild(link)
-    document.querySelector('.ingredients-list').appendChild(li)
-  })
-
-}
-
-function renderAppliancesList(result) {
-  let appliances = result.map(el => el.appliance)
-  appliances = [...new Set(appliances)]
-
-  // console.log(appliances)
-  appliances_list.innerHTML = `
-      <label for="appliancesSearchInput"></label>
-      <div class="dropdown-content__input">
-        <input type="text" id="appliancesSearchInput" placeholder="Rechercher un appareil">
-        <i class="fas fa-chevron-down dropdown-content__arrow appliances-arrow"></i>    
-      </div>
-      
-      <div class="filters-results">
-        <ul class="filters-results-list appliances-list"></ul>
-      </div>
-  `
-  appliances.forEach(el => {
-    const li = document.createElement('li')
-    li.classList.add('filters-results-list__item')
-    const link = document.createElement('a')
-    link.href = '#'
-    link.innerText = `${el}`
-    li.appendChild(link)
-    document.querySelector('.appliances-list').appendChild(li)
-  })
-
-  document.querySelector('.appliances-arrow').addEventListener('click', (e) => {
-    appliances_btn.classList.toggle('hidden')
-    document.getElementById('appliancesDropDown').classList.toggle('hidden')
-  })
-
-  document.getElementById('appliancesSearchInput').addEventListener('input', (e) => {
-    const newList = appliances.filter(appliances => appliances.toLowerCase().includes(e.target.value.toLowerCase()))
-    renderAppliancesListFiltered(newList)
-  })
-
-}
-
-function renderAppliancesListFiltered(newList) {
-  console.log(newList)
-  const appliancesList = document.querySelector('.appliances-list').innerHTML = ''
-
-  console.log(appliancesList)
-  newList.forEach(el => {
-    const li = document.createElement('li')
-    li.classList.add('filters-results-list__item')
-    const link = document.createElement('a')
-    link.classList.add('filters-results-list__item-link')
-    link.href = '#'
-    link.innerText = `${el}`
-    li.appendChild(link)
-    document.querySelector('.appliances-list').appendChild(li)
-  })
-
-}
-
-function renderUstensilsList(result) {
-
-  ustensils = result.map(el => el.ustensils)
-  // console.log(ustensils)
-  let list = []
-  ustensils.forEach(el => {
-    el.forEach(ustensil => {
-      list.push(ustensil)
-    })
-  })
-  // console.warn(list)
-  ustensils = [...new Set(list)]
-  // console.warn(ustensils)
-
-  ustensils_list.innerHTML = `
-      <label for="ustensilsSearchInput"></label>
-      <div class="dropdown-content__input">
-        <input type="text" id="ustensilsSearchInput" placeholder="Rechercher un ustensile">
-        <i class="fas fa-chevron-down dropdown-content__arrow ustensils-arrow"></i>    
-      </div>
-      
-      <div class="filters-results">
-        <ul class="filters-results-list ustensils-list"></ul>
-      </div>
-  `
-
-  ustensils.forEach(el => {
-    const li = document.createElement('li')
-    li.classList.add('filters-results-list__item')
-    const link = document.createElement('a')
-    link.href = '#'
-    link.innerText = `${el}`
-    li.appendChild(link)
-
-    link.addEventListener('click', (e) => {
-      el.toLowerCase()
-      filtersList.push(el)
-      filtersList = [...new Set(filtersList)]
-      console.log(filtersList)
-
-      let newList = result.filter(elem => {
-        return elem.ustensils.includes(el)
-      })
-      newList = [...new Set(newList)]
-      renderUstensilFilter(el)
-      console.log(newList)
-      resetRenderRecipes()
-
-      renderSearch(newList)
-    })
-
-    document.querySelector('.ustensils-list').appendChild(li)
-
-    document.querySelector('.ustensils-arrow').addEventListener('click', (e) => {
-      ustensils_btn.classList.toggle('hidden')
-      document.getElementById('ustensilsDropDown').classList.toggle('hidden')
-    })
-
-    document.getElementById('ustensilsSearchInput').addEventListener('input', (e) => {
-      const newList = ustensils.filter(ustensils => ustensils.toLowerCase().includes(e.target.value.toLowerCase()))
-      renderUstensilsListFiltered(newList)
-      // renderUstensilsList(newList)
-    })
-
-  })
-}
-
-function renderUstensilsListFiltered(newList) {
-  const ustensilsList = document.querySelector('.ustensils-list')
-  ustensilsList.innerHTML = ''
-
-  newList.forEach(el => {
-    const li = document.createElement('li')
-    li.classList.add('filters-results-list__item')
-    const link = document.createElement('a')
-    link.classList.add('filters-results-list__item-link')
-    link.href = '#'
-    link.innerText = `${el}`
-    li.appendChild(link)
-
-    link.addEventListener('click', (e) => {
-      el.toLowerCase()
-      filtersList.push(el)
-      filtersList = [...new Set(filtersList)]
-      console.log(newList)
-      let newResult = recipes.filter(elem => {
-        return elem.ustensils.includes(recipes)
-      })
-      newResult = [...new Set(newResult)]
-      console.log(filtersList)
-      renderUstensilFilter(el)
-      // renderSearch(newList)
-      // TODO CHECK THIS
-      resetRenderRecipes()
-
-      renderSearch(newResult)
-      console.log(newResult)
-      console.log(ustensils)
-      renderUstensilsList(newResult)
-
-      // renderIngredientsList(recipes)
-      // renderAppliancesList(recipes)
-      // renderUstensilsList(recipes)
-    })
-    document.querySelector('.ustensils-list').appendChild(li)
-  })
-
-}
-
-ingredients_btn.addEventListener('click', () => {
-  ingredients_btn.classList.add('hidden')
-  ingredients_list.classList.toggle('hidden')
-
-  appliances_list.classList.add('hidden')
-  appliances_btn.classList.remove('hidden')
-
-  ustensils_list.classList.add('hidden')
-  ustensils_btn.classList.remove('hidden')
-
-  // renderIngredientsList()
+    renderIngredientsListFilter(ingredientsSearchResult)
+  }
 })
 
-appliances_btn.addEventListener('click', () => {
-  appliances_btn.classList.add('hidden')
-  appliances_list.classList.toggle('hidden')
-
-  ingredients_list.classList.add('hidden')
-  ingredients_btn.classList.remove('hidden')
-
-  ustensils_list.classList.add('hidden')
-  ustensils_btn.classList.remove('hidden')
-  // renderAppliancesList()
+/**
+ * appareils button
+ * display list of filters
+ * @event clic
+ */
+appliancesFilter_btn.addEventListener('click', (e) => {
+  toggleDisplayAppliancesFilter()
+  renderAppliancesList()
 })
 
-ustensils_btn.addEventListener('click', () => {
-  ingredients_list.classList.add('hidden')
-  ingredients_btn.classList.remove('hidden')
+appliancesFilterSearch_arrow.addEventListener('click', (e) => {
+  toggleDisplayAppliancesFilter()
+})
 
-  appliances_list.classList.add('hidden')
-  appliances_btn.classList.remove('hidden')
+/**
+ * appareils filter search
+ * @event input
+ */
+appliancesFilterSearch_input.addEventListener('input', (e) => {
+  let searchAppliancesInput = e.target.value.toLowerCase()
 
-  ustensils_btn.classList.add('hidden')
-  ustensils_list.classList.toggle('hidden')
+  if (searchAppliancesInput.length < 3) {
+    appliancesList_ul.innerHTML = ''
+    renderAppliancesList(appliancesList)
+  }
+
+  if (searchAppliancesInput.length > 2) {
+    appliancesList_ul.innerHTML = ''
+
+    let appliancesSearchResult = appliancesList.filter(appliancesList => appliancesList.toLowerCase()
+      .includes(searchAppliancesInput))
+    appliancesSearchResult = [...new Set(appliancesSearchResult)]
+
+    renderAppliancesListFiltered(appliancesSearchResult)
+  }
+})
+
+/**
+ * ustensiles button
+ * display list of filters
+ * @event clic
+ */
+ustensilsFilter_btn.addEventListener('click', (e) => {
+  toggleDisplayUstensilsFilter()
   renderUstensilsList()
 })
 
-function focus() {
-  search_input.focus()
-}
-// ##############################################################
+ustensilsFilterSearch_arrow.addEventListener('click', (e) => {
+  toggleDisplayUstensilsFilter()
+})
 
-// const filteredByReceipe = data.recipes.filter((elem) =>
-//   elem.name.toLocaleLowerCase().includes(mySearch)
-// );
-//
-// function filterByApplance(value) {
-//   return filteredByReceipe.filter((elem) =>
-//     elem.appliance.toLocaleLowerCase().includes(value)
-//   );
-// }
+/**
+ * ustensils filter search
+ * @event input
+ */
+ustensilsFilterSearch_input.addEventListener('input', (e) => {
+  let searchUstensilsInput = e.target.value.toLowerCase()
 
-// ##############################################################
+  /**
+   * reset the ustensils list when the user delete input
+   */
+  if (searchUstensilsInput.length < 3) {
+    ustensilsList_ul.innerHTML = ''
+    renderUstensilsList(ustensilsList)
+  }
+  /**
+   * display result start at 3 character
+   */
+  if (searchUstensilsInput.length > 2) {
+    ustensilsList_ul.innerHTML = ''
+
+    let ustensilsSearchResult = ustensilsList.filter(ustensilsList => ustensilsList.toLowerCase()
+      .includes(searchUstensilsInput))
+    ustensilsSearchResult = [...new Set(ustensilsSearchResult)]
+
+    // renderUstensilsList(ustensilsSearchResult)
+    renderUstensilsListFiltered(ustensilsSearchResult)
+  }
+})
+
+fetchAllRecipes()
+  .then(renderRecipes)
+  .then(generateIngredientsList)
+  .then(generateAppliancesList)
+  .then(generateUstensilsList)
 
