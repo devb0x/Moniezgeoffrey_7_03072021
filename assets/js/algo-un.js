@@ -337,12 +337,12 @@ function renderUstensilsListFiltered(ustensilsSearchResult) {
  * @param value
  */
 function filterRecipes(recipeList, value) {
-  let newResult = recipeList
+  let searchResult = recipeList
 
   filterList.forEach(filterItem => {
     switch (filterItem.category) {
       case ('ingredient'):
-        newResult = newResult.filter(recipe => {
+        searchResult = searchResult.filter(recipe => {
           return recipe.ingredients.some(ingredient => {
             if (ingredient.ingredient.toLowerCase().includes(filterItem.value)) {
               return recipe
@@ -351,12 +351,12 @@ function filterRecipes(recipeList, value) {
         })
         break
       case ('appliance'):
-        newResult = newResult.filter(recipe => {
+        searchResult = searchResult.filter(recipe => {
           return recipe.appliance.toLowerCase().includes(filterItem.value);
         })
         break
       case ('ustensil'):
-        newResult = newResult.filter(recipe => {
+        searchResult = searchResult.filter(recipe => {
           return recipe.ustensils.some(ustensil => {
             if (ustensil.toLowerCase().includes(filterItem.value)) {
               return recipe
@@ -367,7 +367,7 @@ function filterRecipes(recipeList, value) {
   })
 
   resetRenderRecipes()
-  renderResult(newResult)
+  renderResult(searchResult)
   addEventFilter()
   generateIngredientsList(searchResult)
   generateAppliancesList(searchResult)
@@ -398,25 +398,28 @@ function addEventFilter() {
  * Main research
  * @event input
  */
-// search_form.addEventListener('input', (e) => {
-//   e.preventDefault()
-//
-//   if (search_input.value && search_input.value.length < 3) {
-//
-//   }
-//   /**
-//    * the research start at 3 character
-//    */
-//   if (search_input.value && search_input.value.length > 2) {
-//     let searchResult = search(recipesList, search_input.value)
-//     /**
-//      * reset DOM and render the recipes
-//      */
-//     resetRenderRecipes()
-//     renderResult(searchResult)
-//
-//   }
-// })
+search_form.addEventListener('input', (e) => {
+  e.preventDefault()
+
+  if (search_input.value && search_input.value.length < 3) {
+
+  }
+  /**
+   * the research start at 3 character
+   */
+  if (search_input.value && search_input.value.length > 2) {
+    let searchResult = search(recipesList, search_input.value)
+    /**
+     * reset DOM and render the recipes
+     */
+    resetRenderRecipes()
+    renderResult(searchResult)
+
+    generateIngredientsList(searchResult)
+    generateAppliancesList(searchResult)
+    generateUstensilsList(searchResult)
+  }
+})
 
 /**
  * Main research
