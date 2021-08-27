@@ -125,20 +125,18 @@ function search(recipesList, value) {
 }
 
 /**
- * ingredientsList[]
- * push data from reipesList
+ * reset ingredientsList[]
+ * push data from searchResult || recipesList
  */
 function generateIngredientsList(searchResult) {
   if (searchResult) {
     ingredientsList = []
-    console.warn('ingredients inside if = searchResult.filter()')
     searchResult.filter(recipes => recipes.ingredients.forEach(el => {
       ingredientsList.push(el.ingredient.toLowerCase())
     }))
     ingredientsList = [...new Set(ingredientsList)]
   } else {
     ingredientsList = []
-    console.warn('inside else = recipesList.filter()')
     recipesList.filter(recipes => recipes.ingredients.forEach(el => {
       ingredientsList.push(el.ingredient.toLowerCase())
     }))
@@ -147,13 +145,12 @@ function generateIngredientsList(searchResult) {
 }
 
 /**
- * appliancesList[]
- * push data from reipesList
+ * reset appliancesList[]
+ * push data from searchResult || recipesList
  */
 function generateAppliancesList(searchResult) {
   if (searchResult) {
     appliancesList = []
-    console.warn('appliances inside if = searchResult.filter()')
     searchResult.filter(recipe =>
       appliancesList.push(recipe.appliance.toLowerCase())
     )
@@ -167,13 +164,13 @@ function generateAppliancesList(searchResult) {
 }
 
 /**
- * ustensilsList[]
- * push data from reipesList
+ * reset ustensilsList[]
+ * push data from searchResult || recipesList
+ * @param searchResult
  */
 function generateUstensilsList(searchResult) {
   if (searchResult) {
     ustensilsList = []
-    console.warn('ustensils inside if = searchResult.filter()')
     searchResult.filter(recipes => recipes.ustensils.forEach(el => {
       ustensilsList.push(el.toLowerCase())
     }))
@@ -332,7 +329,7 @@ function renderUstensilsListFiltered(ustensilsSearchResult) {
 }
 
 /**
- * filter recip
+ * filter recipes
  * @param recipeList
  * @param value
  */
@@ -402,7 +399,12 @@ search_form.addEventListener('input', (e) => {
   e.preventDefault()
 
   if (search_input.value && search_input.value.length < 3) {
+    resetRenderRecipes()
+    renderRecipes()
 
+    generateIngredientsList()
+    generateAppliancesList()
+    generateUstensilsList()
   }
   /**
    * the research start at 3 character
