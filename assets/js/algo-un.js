@@ -128,33 +128,62 @@ function search(recipesList, value) {
  * ingredientsList[]
  * push data from reipesList
  */
-function generateIngredientsList() {
-  recipesList.filter(recipes => recipes.ingredients.forEach(el => {
-    ingredientsList.push(el.ingredient.toLowerCase())
-  }))
-  ingredientsList = [...new Set(ingredientsList)]
+function generateIngredientsList(searchResult) {
+  if (searchResult) {
+    ingredientsList = []
+    console.warn('ingredients inside if = searchResult.filter()')
+    searchResult.filter(recipes => recipes.ingredients.forEach(el => {
+      ingredientsList.push(el.ingredient.toLowerCase())
+    }))
+    ingredientsList = [...new Set(ingredientsList)]
+  } else {
+    ingredientsList = []
+    console.warn('inside else = recipesList.filter()')
+    recipesList.filter(recipes => recipes.ingredients.forEach(el => {
+      ingredientsList.push(el.ingredient.toLowerCase())
+    }))
+    ingredientsList = [...new Set(ingredientsList)]
+  }
 }
 
 /**
  * appliancesList[]
  * push data from reipesList
  */
-function generateAppliancesList() {
-  recipesList.filter(recipe =>
-    appliancesList.push(recipe.appliance.toLowerCase())
-  )
-  appliancesList = [...new Set(appliancesList)]
+function generateAppliancesList(searchResult) {
+  if (searchResult) {
+    appliancesList = []
+    console.warn('appliances inside if = searchResult.filter()')
+    searchResult.filter(recipe =>
+      appliancesList.push(recipe.appliance.toLowerCase())
+    )
+    appliancesList = [...new Set(appliancesList)]
+  } else {
+    recipesList.filter(recipe =>
+      appliancesList.push(recipe.appliance.toLowerCase())
+    )
+    appliancesList = [...new Set(appliancesList)]
+  }
 }
 
 /**
  * ustensilsList[]
  * push data from reipesList
  */
-function generateUstensilsList() {
-  recipesList.filter(recipes => recipes.ustensils.forEach(el => {
-    ustensilsList.push(el.toLowerCase())
-  }))
-  ustensilsList = [...new Set(ustensilsList)]
+function generateUstensilsList(searchResult) {
+  if (searchResult) {
+    ustensilsList = []
+    console.warn('ustensils inside if = searchResult.filter()')
+    searchResult.filter(recipes => recipes.ustensils.forEach(el => {
+      ustensilsList.push(el.toLowerCase())
+    }))
+    ustensilsList = [...new Set(ustensilsList)]
+  } else {
+    recipesList.filter(recipes => recipes.ustensils.forEach(el => {
+      ustensilsList.push(el.toLowerCase())
+    }))
+    ustensilsList = [...new Set(ustensilsList)]
+  }
 }
 
 /**
@@ -173,9 +202,12 @@ function renderFilter(filter, btnClass) {
 }
 
 /**
+ * create list from
  * ingredientsList[]
  */
 function renderIngredientsList() {
+  ingredientsList_ul.innerHTML = ''
+
   ingredientsList.forEach(el => {
     const li = document.createElement('li')
     li.classList.add('filters-results-list__item')
@@ -196,9 +228,12 @@ function renderIngredientsList() {
 }
 
 /**
+ * create list from
  * appliancesList[]
  */
 function renderAppliancesList() {
+  appliancesList_ul.innerHTML = ''
+
   appliancesList.forEach(el => {
     const li = document.createElement('li')
     li.classList.add('filters-results-list__item')
@@ -215,9 +250,12 @@ function renderAppliancesList() {
 }
 
 /**
+ * create list from
  * ustensilsList[]
  */
 function renderUstensilsList() {
+  ustensilsList_ul.innerHTML = ''
+
   ustensilsList.forEach(el => {
     const li = document.createElement('li')
     li.classList.add('filters-results-list__item')
@@ -233,6 +271,10 @@ function renderUstensilsList() {
   })
 }
 
+/**
+ * function filter for ingredients input
+ * @param ingredientsSearchResult
+ */
 function renderIngredientsListFilter(ingredientsSearchResult) {
   ingredientsSearchResult.forEach(el => {
     const li = document.createElement('li')
@@ -249,6 +291,10 @@ function renderIngredientsListFilter(ingredientsSearchResult) {
   })
 }
 
+/**
+ * function filter for appareils input
+ * @param appliancesSearchResult
+ */
 function renderAppliancesListFiltered(appliancesSearchResult) {
   appliancesSearchResult.forEach(el => {
     const li = document.createElement('li')
@@ -265,6 +311,10 @@ function renderAppliancesListFiltered(appliancesSearchResult) {
   })
 }
 
+/**
+ * function filter for ustensils input
+ * @param ustensilsSearchResult
+ */
 function renderUstensilsListFiltered(ustensilsSearchResult) {
   ustensilsSearchResult.forEach(el => {
     const li = document.createElement('li')
@@ -319,9 +369,13 @@ function filterRecipes(recipeList, value) {
   resetRenderRecipes()
   renderResult(newResult)
   addEventFilter()
+  generateIngredientsList(searchResult)
+  generateAppliancesList(searchResult)
+  generateUstensilsList(searchResult)
 }
 
 /**
+ * function for adding event listener on the filters list
  * @event click
  */
 function addEventFilter() {
@@ -344,18 +398,25 @@ function addEventFilter() {
  * Main research
  * @event input
  */
-search_form.addEventListener('input', (e) => {
-  e.preventDefault()
-
-  /**
-   * the research start at 3 character
-   */
-  if (search_input.value && search_input.value.length > 2) {
-    let searchResult = search(recipesList, search_input.value)
-    resetRenderRecipes()
-    renderResult(searchResult)
-  }
-})
+// search_form.addEventListener('input', (e) => {
+//   e.preventDefault()
+//
+//   if (search_input.value && search_input.value.length < 3) {
+//
+//   }
+//   /**
+//    * the research start at 3 character
+//    */
+//   if (search_input.value && search_input.value.length > 2) {
+//     let searchResult = search(recipesList, search_input.value)
+//     /**
+//      * reset DOM and render the recipes
+//      */
+//     resetRenderRecipes()
+//     renderResult(searchResult)
+//
+//   }
+// })
 
 /**
  * Main research
@@ -366,9 +427,17 @@ search_form.addEventListener('submit', (e) => {
   search_input.blur()
   if (search_input.value && search_input.value.length > 2) {
     let searchResult = search(recipesList, search_input.value)
+    /**
+     * reset DOM and render the recipes
+     */
     resetRenderRecipes()
     renderResult(searchResult)
-    // renderIngredientsList()
+
+    generateIngredientsList(searchResult)
+    generateAppliancesList(searchResult)
+    generateUstensilsList(searchResult)
+
+    search_form.reset()
   }
 })
 
@@ -511,7 +580,6 @@ ustensilsFilterSearch_input.addEventListener('input', (e) => {
       .includes(searchUstensilsInput))
     ustensilsSearchResult = [...new Set(ustensilsSearchResult)]
 
-    // renderUstensilsList(ustensilsSearchResult)
     renderUstensilsListFiltered(ustensilsSearchResult)
   }
 })
@@ -521,4 +589,3 @@ fetchAllRecipes()
   .then(generateIngredientsList)
   .then(generateAppliancesList)
   .then(generateUstensilsList)
-
