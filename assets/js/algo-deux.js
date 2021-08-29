@@ -75,7 +75,7 @@ function renderAllRecipes() {
 /**
  * push data in ingredientsList[]
  */
-function generateIngredientsFilter() {
+function generateIngredientsList() {
   recipes.filter(recipes => recipes.ingredients.forEach(el => {
     ingredientsList.push(el.ingredient.toLowerCase())
   }))
@@ -240,11 +240,7 @@ search_form.addEventListener('submit', (e) => {
   e.preventDefault()
   console.log(search_input.value)
 
-  /**
-   * reset the filterList
-   * @type {*[]}
-   */
-  filterList = []
+  removeFilter()
 
   /**
    * the research start at 3 character
@@ -287,27 +283,39 @@ function renderFilter(filter, btnClass) {
   filter_span.classList.add('filter-item', btnClass)
   filter_span.innerHTML = `${filter.value} <i class="far fa-times-circle"></i>`
   filters_div.append(filter_span)
+  console.log(newResult)
 
+  filterRecipes(filter)
+}
+
+function removeFilter() {
+  filterList = []
+  document.querySelectorAll('.filter-item').forEach(el => el.remove())
+}
+
+function filterRecipes() {
+  newResult = searchResult;
+  console.log("INPUT",newResult)
   filterList.forEach(filterItem => {
     switch (filterItem.category) {
       case ('ingredient'):
-        newResult = searchResult.filter(recipe => {
+        newResult = newResult.filter(recipe => {
           return recipe.ingredients.some(ingredient => {
-            if (ingredient.ingredient.toLowerCase().includes(filter.value)) {
+            if (ingredient.ingredient.toLowerCase().includes(filterItem.value)) {
               return recipe
             }
           })
         })
         break
       case ('appliance'):
-        newResult = searchResult.filter(recipe => {
-          return recipe.appliance.toLowerCase().includes(filter.value);
+        newResult = newResult.filter(recipe => {
+          return recipe.appliance.toLowerCase().includes(filterItem.value);
         })
         break
       case ('ustensil'):
-        newResult = searchResult.filter(recipe => {
+        newResult = newResult.filter(recipe => {
           return recipe.ustensils.some(ustensil => {
-            if (ustensil.toLowerCase().includes(filter.value)) {
+            if (ustensil.toLowerCase().includes(filterItem.value)) {
               return recipe
             }
           })
@@ -315,6 +323,7 @@ function renderFilter(filter, btnClass) {
     }
   })
 
+  console.log("OUTPUT",newResult)
   resetRenderRecipes()
   renderResultFiltered(newResult)
 
@@ -327,6 +336,9 @@ function renderFilter(filter, btnClass) {
       filterList = filterList.filter(item => {
         return item.value !== filterValue
       })
+      resetRenderRecipes()
+      filterRecipes()
+      // renderResultFiltered(newResult)
     }))
   }
 
@@ -387,10 +399,16 @@ function toggleDisplayIngredientsListFilter() {
 
 ingredientsFilter_btn.addEventListener('click', (e) => {
   toggleDisplayIngredientsListFilter()
+  if (searchResult.length === 0) {
+    renderIngredientsListFilter(ingredientsList)
+  }
 })
 
 ingredientsFilterSearch_arrow.addEventListener('click', (e) => {
   toggleDisplayIngredientsListFilter()
+  if (searchResult === 0) {
+    resetRenderSecondaryList()
+  }
 })
 
 /**
@@ -427,10 +445,16 @@ function toggleDisplayAppliancesFilter() {
 
 appliancesFilter_btn.addEventListener('click', (e) => {
   toggleDisplayAppliancesFilter()
+  if (searchResult.length === 0) {
+    renderAppliancesListFilter(appliancesList)
+  }
 })
 
 appliancesFilterSearch_arrow.addEventListener('click', (e) => {
   toggleDisplayAppliancesFilter()
+  if (searchResult.length === 0) {
+    resetRenderSecondaryList()
+  }
 })
 
 /**
@@ -469,10 +493,16 @@ function toggleDisplayUstensilsFilter() {
 
 ustensilsFilter_btn.addEventListener('click', (e) => {
   toggleDisplayUstensilsFilter()
+  if (searchResult.length === 0) {
+    renderUstensilsListFilter(ustensilsList)
+  }
 })
 
 ustensilsFilterSearch_arrow.addEventListener('click', (e) => {
   toggleDisplayUstensilsFilter()
+  if (searchResult === 0) {
+    resetRenderSecondaryList()
+  }
 })
 
 /**
@@ -517,6 +547,6 @@ ustensilsFilterSearch_input.addEventListener('input', (e) => {
 
 fetchAllRecipes()
   .then(renderAllRecipes)
-  .then(generateIngredientsFilter)
+  .then(generateIngredientsList)
   .then(generateAppliancesList)
   .then(generateUstensilsList)
