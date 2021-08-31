@@ -56,21 +56,38 @@ function fetchAllRecipes() {
 }
 
 /**
- * render all data in recipesList[]
+ * create new Recipe
+ * render it
+ * @param searchResult
  */
-function renderRecipes() {
-  recipesList.forEach(el => {
-    new Recipe(
-      el.id,
-      el.name,
-      el.servings,
-      el.ingredients,
-      el.time,
-      el.description,
-      el.appliance,
-      el.ustensils
-    ).render()
-  })
+function renderRecipes(searchResult) {
+  if (searchResult) {
+    searchResult.forEach(el => {
+      new Recipe(
+        el.id,
+        el.name,
+        el.servings,
+        el.ingredients,
+        el.time,
+        el.description,
+        el.appliance,
+        el.ustensils
+      ).render()
+    })
+  } else {
+    recipesList.forEach(el => {
+      new Recipe(
+        el.id,
+        el.name,
+        el.servings,
+        el.ingredients,
+        el.time,
+        el.description,
+        el.appliance,
+        el.ustensils
+      ).render()
+    })
+  }
 }
 
 /**
@@ -272,7 +289,7 @@ function renderUstensilsList() {
  * function filter for ingredients input
  * @param ingredientsSearchResult
  */
-function renderIngredientsListFilter(ingredientsSearchResult) {
+function renderIngredientsListFiltered(ingredientsSearchResult) {
   ingredientsSearchResult.forEach(el => {
     const li = document.createElement('li')
     li.classList.add('filters-results-list__item')
@@ -420,6 +437,10 @@ search_form.addEventListener('input', (e) => {
     generateIngredientsList(searchResult)
     generateAppliancesList(searchResult)
     generateUstensilsList(searchResult)
+
+    renderIngredientsList()
+    renderAppliancesList()
+    renderUstensilsList()
   }
 })
 
@@ -438,9 +459,14 @@ search_form.addEventListener('submit', (e) => {
     resetRenderRecipes()
     renderResult(searchResult)
 
+
     generateIngredientsList(searchResult)
     generateAppliancesList(searchResult)
     generateUstensilsList(searchResult)
+
+    renderIngredientsList()
+    renderAppliancesList()
+    renderUstensilsList()
 
     search_form.reset()
   }
@@ -478,12 +504,12 @@ function toggleDisplayUstensilsFilter() {
  * display list of filters
  * @event clic
  */
-ingredientsFilter_btn.addEventListener('click', (e) => {
+ingredientsFilter_btn.addEventListener('click', () => {
   toggleDisplayIngredientsListFilter()
   renderIngredientsList()
 })
 
-ingredientsFilterSearch_arrow.addEventListener('click', (e) => {
+ingredientsFilterSearch_arrow.addEventListener('click', () => {
   toggleDisplayIngredientsListFilter()
 })
 
@@ -506,7 +532,7 @@ ingredientsFilterSearch_input.addEventListener('input', (e) => {
       .includes(searchIngredientsInput))
     ingredientsSearchResult = [...new Set(ingredientsSearchResult)]
 
-    renderIngredientsListFilter(ingredientsSearchResult)
+    renderIngredientsListFiltered(ingredientsSearchResult)
   }
 })
 
@@ -515,12 +541,12 @@ ingredientsFilterSearch_input.addEventListener('input', (e) => {
  * display list of filters
  * @event clic
  */
-appliancesFilter_btn.addEventListener('click', (e) => {
+appliancesFilter_btn.addEventListener('click', () => {
   toggleDisplayAppliancesFilter()
   renderAppliancesList()
 })
 
-appliancesFilterSearch_arrow.addEventListener('click', (e) => {
+appliancesFilterSearch_arrow.addEventListener('click', () => {
   toggleDisplayAppliancesFilter()
 })
 
@@ -552,12 +578,12 @@ appliancesFilterSearch_input.addEventListener('input', (e) => {
  * display list of filters
  * @event clic
  */
-ustensilsFilter_btn.addEventListener('click', (e) => {
+ustensilsFilter_btn.addEventListener('click', () => {
   toggleDisplayUstensilsFilter()
   renderUstensilsList()
 })
 
-ustensilsFilterSearch_arrow.addEventListener('click', (e) => {
+ustensilsFilterSearch_arrow.addEventListener('click', () => {
   toggleDisplayUstensilsFilter()
 })
 
