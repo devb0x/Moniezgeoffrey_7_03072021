@@ -6,7 +6,6 @@ const search_form = document.getElementById('searchForm')
 const search_input = document.getElementById('searchFormInput')
 
 const filters_div = document.querySelector('.filters-list')
-// const filterItem_i = document.querySelectorAll('.fa-times-circle')
 
 const ingredientsFilter_btn = document.getElementById('ingredientsBtn')
 const ingredientsFilter_dropdown = document.getElementById('ingredientsDropDown')
@@ -26,14 +25,11 @@ const ustensilsFilterSearch_input = document.getElementById('ustensilsSearchInpu
 const ustensilsFilterSearch_arrow = document.querySelector('.ustensils-arrow')
 const ustensilsList_ul = document.querySelector('.ustensils-list')
 
-
-
 let recipesList = []
 let ingredientsList = []
 let appliancesList = []
 let ustensilsList =[]
 let filterList = []
-
 
 /**
  * recipesList[]
@@ -90,27 +86,27 @@ function renderRecipes(searchResult) {
   }
 }
 
-/**
- * render function used when the user type or submit the form
- * @param searchResult
- */
-function renderResult(searchResult) {
-  searchResult.forEach(el => {
-    new Recipe(
-      el.id,
-      el.name,
-      el.servings,
-      el.ingredients,
-      el.time,
-      el.description,
-      el.appliance,
-      el.ustensils
-    ).render()
-  })
-}
+// /**
+//  * render function used when the user type or submit the form
+//  * @param searchResult
+//  */
+// function renderResult(searchResult) {
+//   searchResult.forEach(el => {
+//     new Recipe(
+//       el.id,
+//       el.name,
+//       el.servings,
+//       el.ingredients,
+//       el.time,
+//       el.description,
+//       el.appliance,
+//       el.ustensils
+//     ).render()
+//   })
+// }
 
 /**
- * target all the .recipe and
+ * select all the .recipe and
  * remove them from the .recipes section
  */
 function resetRenderRecipes() {
@@ -127,23 +123,23 @@ function resetRenderRecipes() {
  * function filtering recipes from name, description, or ingredients
  * @param recipesList
  * @param value
- * @returns {*}
+ * @returns {*[]}
  */
 function search(recipesList, value) {
-  return recipesList.filter((recipe) => {
-    return (
-      recipe.name.toLowerCase().includes(value.toLowerCase()) ||
-      recipe.description.toLowerCase().includes(value.toLowerCase()) ||
-      recipe.ingredients.some((ingredientObj) =>
-        ingredientObj.ingredient.toLowerCase().includes(value.toLowerCase())
-      )
-    );
-  });
+  const filteredByName = recipesList.filter(recipe => recipe.name.toLowerCase().includes(value.toLowerCase()))
+  const filteredByDescription = recipesList.filter(recipe => recipe.description.toLowerCase().includes(value.toLowerCase()))
+  const filteredByIngredient = recipesList.filter(recipe => recipe.ingredients.some((ingredientObj) =>
+    ingredientObj.ingredient.toLowerCase().includes(value.toLowerCase())
+  ))
+
+  const result = [...new Set([...filteredByName, ...filteredByDescription, ...filteredByIngredient])]
+  return result
 }
 
 /**
  * reset ingredientsList[]
- * push data from searchResult || recipesList
+ * push data from searchResult || recipesList and generate the list of ingredients
+ * @param searchResult
  */
 function generateIngredientsList(searchResult) {
   if (searchResult) {
@@ -163,8 +159,10 @@ function generateIngredientsList(searchResult) {
 
 /**
  * reset appliancesList[]
- * push data from searchResult || recipesList
+ * push data from searchResult || recipesList and generate the list of appliances
+ * @param searchResult
  */
+
 function generateAppliancesList(searchResult) {
   if (searchResult) {
     appliancesList = []
@@ -182,7 +180,7 @@ function generateAppliancesList(searchResult) {
 
 /**
  * reset ustensilsList[]
- * push data from searchResult || recipesList
+ * push data from searchResult || recipesList annd generate the list of ustensils
  * @param searchResult
  */
 function generateUstensilsList(searchResult) {
@@ -201,13 +199,18 @@ function generateUstensilsList(searchResult) {
 }
 
 /**
- * add a filter when the user select one in filter list
+ * add a filter in filterList when the user select one
  * @param filter
  */
 function addToFilterList(filter) {
   filterList.push(filter)
 }
 
+/**
+ * render the filter below the main search input
+ * @param filter
+ * @param btnClass
+ */
 function renderFilter(filter, btnClass) {
   const filter_span = document.createElement('span')
   filter_span.classList.add('filter-item', btnClass)
@@ -219,7 +222,7 @@ function renderFilter(filter, btnClass) {
  * create list from
  * ingredientsList[]
  */
-function renderIngredientsList() {
+function renderIngredientsList(searchResult) {
   ingredientsList_ul.innerHTML = ''
 
   ingredientsList.forEach(el => {
@@ -234,6 +237,7 @@ function renderIngredientsList() {
     li.addEventListener('click', (e) => {
       addToFilterList({category: 'ingredient', value: e.target.innerText.toLowerCase()})
       renderFilter({category: 'ingredient', value: e.target.innerText.toLowerCase()}, 'btn_blue')
+      // filterRecipes(searchResult, e.target.innerText.toLowerCase())
       filterRecipes(recipesList, e.target.innerText.toLowerCase())
     })
 
@@ -348,9 +352,8 @@ function renderUstensilsListFiltered(ustensilsSearchResult) {
 /**
  * filter recipes
  * @param recipeList
- * @param value
  */
-function filterRecipes(recipeList, value) {
+function filterRecipes(recipeList) {
   let searchResult = recipeList
 
   filterList.forEach(filterItem => {
@@ -381,7 +384,8 @@ function filterRecipes(recipeList, value) {
   })
 
   resetRenderRecipes()
-  renderResult(searchResult)
+  // renderResult(searchResult)
+  renderRecipes(searchResult)
   addEventFilter()
   generateIngredientsList(searchResult)
   generateAppliancesList(searchResult)
@@ -389,7 +393,7 @@ function filterRecipes(recipeList, value) {
 }
 
 /**
- * function for adding event listener on the filters list
+ * function for adding event listener when we remove a filter from the filters List
  * @event click
  */
 function addEventFilter() {
@@ -432,15 +436,16 @@ search_form.addEventListener('input', (e) => {
      * reset DOM and render the recipes
      */
     resetRenderRecipes()
-    renderResult(searchResult)
+    // renderResult(searchResult)
+    renderRecipes(searchResult)
 
     generateIngredientsList(searchResult)
     generateAppliancesList(searchResult)
     generateUstensilsList(searchResult)
 
-    renderIngredientsList()
-    renderAppliancesList()
-    renderUstensilsList()
+    // renderIngredientsList()
+    // renderAppliancesList()
+    // renderUstensilsList()
   }
 })
 
@@ -449,6 +454,8 @@ search_form.addEventListener('input', (e) => {
  * @event submit
  */
 search_form.addEventListener('submit', (e) => {
+  filterList = []
+
   e.preventDefault()
   search_input.blur()
   if (search_input.value && search_input.value.length > 2) {
@@ -457,16 +464,16 @@ search_form.addEventListener('submit', (e) => {
      * reset DOM and render the recipes
      */
     resetRenderRecipes()
-    renderResult(searchResult)
-
+    renderRecipes(searchResult)
+    // renderResult(searchResult)
 
     generateIngredientsList(searchResult)
     generateAppliancesList(searchResult)
     generateUstensilsList(searchResult)
 
-    renderIngredientsList()
-    renderAppliancesList()
-    renderUstensilsList()
+    // renderIngredientsList()
+    // renderAppliancesList()
+    // renderUstensilsList()
 
     search_form.reset()
   }
