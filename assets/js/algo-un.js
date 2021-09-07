@@ -142,8 +142,10 @@ function search(recipesList, value) {
  * @param searchResult
  */
 function generateIngredientsList(searchResult) {
+
   if (searchResult) {
     ingredientsList = []
+    console.log(searchResult)
     searchResult.filter(recipes => recipes.ingredients.forEach(el => {
       ingredientsList.push(el.ingredient.toLowerCase())
     }))
@@ -416,45 +418,45 @@ function addEventFilter() {
  * Main research
  * @event input
  */
-search_form.addEventListener('input', (e) => {
-  e.preventDefault()
-
-  if (search_input.value && search_input.value.length < 3) {
-    resetRenderRecipes()
-    renderRecipes()
-
-    generateIngredientsList()
-    generateAppliancesList()
-    generateUstensilsList()
-  }
-  /**
-   * the research start at 3 character
-   */
-  if (search_input.value && search_input.value.length > 2) {
-    let searchResult = search(recipesList, search_input.value)
-    /**
-     * reset DOM and render the recipes
-     */
-    resetRenderRecipes()
-    // renderResult(searchResult)
-    renderRecipes(searchResult)
-
-    generateIngredientsList(searchResult)
-    generateAppliancesList(searchResult)
-    generateUstensilsList(searchResult)
-
-    // renderIngredientsList()
-    // renderAppliancesList()
-    // renderUstensilsList()
-  }
-})
+// search_form.addEventListener('input', (e) => {
+//   e.preventDefault()
+//
+//   if (search_input.value && search_input.value.length < 3) {
+//     resetRenderRecipes()
+//     renderRecipes()
+//
+//     generateIngredientsList()
+//     generateAppliancesList()
+//     generateUstensilsList()
+//   }
+//   /**
+//    * the research start at 3 character
+//    */
+//   if (search_input.value && search_input.value.length > 2) {
+//     let searchResult = search(recipesList, search_input.value)
+//     /**
+//      * reset DOM and render the recipes
+//      */
+//     resetRenderRecipes()
+//     // renderResult(searchResult)
+//     renderRecipes(searchResult)
+//
+//     generateIngredientsList(searchResult)
+//     generateAppliancesList(searchResult)
+//     generateUstensilsList(searchResult)
+//
+//     // renderIngredientsList()
+//     // renderAppliancesList()
+//     // renderUstensilsList()
+//   }
+// })
 
 /**
  * Main research
  * @event submit
  */
 search_form.addEventListener('submit', (e) => {
-  filterList = []
+  // filterList = []
 
   e.preventDefault()
   search_input.blur()
@@ -465,15 +467,10 @@ search_form.addEventListener('submit', (e) => {
      */
     resetRenderRecipes()
     renderRecipes(searchResult)
-    // renderResult(searchResult)
 
     generateIngredientsList(searchResult)
     generateAppliancesList(searchResult)
     generateUstensilsList(searchResult)
-
-    // renderIngredientsList()
-    // renderAppliancesList()
-    // renderUstensilsList()
 
     search_form.reset()
   }
