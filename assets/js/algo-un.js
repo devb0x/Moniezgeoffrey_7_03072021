@@ -86,25 +86,6 @@ function renderRecipes(searchResult) {
   }
 }
 
-// /**
-//  * render function used when the user type or submit the form
-//  * @param searchResult
-//  */
-// function renderResult(searchResult) {
-//   searchResult.forEach(el => {
-//     new Recipe(
-//       el.id,
-//       el.name,
-//       el.servings,
-//       el.ingredients,
-//       el.time,
-//       el.description,
-//       el.appliance,
-//       el.ustensils
-//     ).render()
-//   })
-// }
-
 /**
  * select all the .recipe and
  * remove them from the .recipes section
@@ -142,10 +123,8 @@ function search(recipesList, value) {
  * @param searchResult
  */
 function generateIngredientsList(searchResult) {
-
   if (searchResult) {
     ingredientsList = []
-    console.log(searchResult)
     searchResult.filter(recipes => recipes.ingredients.forEach(el => {
       ingredientsList.push(el.ingredient.toLowerCase())
     }))
@@ -224,7 +203,7 @@ function renderFilter(filter, btnClass) {
  * create list from
  * ingredientsList[]
  */
-function renderIngredientsList(searchResult) {
+function renderIngredientsList() {
   ingredientsList_ul.innerHTML = ''
 
   ingredientsList.forEach(el => {
@@ -239,7 +218,6 @@ function renderIngredientsList(searchResult) {
     li.addEventListener('click', (e) => {
       addToFilterList({category: 'ingredient', value: e.target.innerText.toLowerCase()})
       renderFilter({category: 'ingredient', value: e.target.innerText.toLowerCase()}, 'btn_blue')
-      // filterRecipes(searchResult, e.target.innerText.toLowerCase())
       filterRecipes(recipesList, e.target.innerText.toLowerCase())
     })
 
@@ -353,10 +331,10 @@ function renderUstensilsListFiltered(ustensilsSearchResult) {
 
 /**
  * filter recipes
- * @param recipeList
+ * @param recipesList
  */
-function filterRecipes(recipeList) {
-  let searchResult = recipeList
+function filterRecipes(recipesList) {
+  let searchResult = recipesList
 
   filterList.forEach(filterItem => {
     switch (filterItem.category) {
@@ -386,8 +364,8 @@ function filterRecipes(recipeList) {
   })
 
   resetRenderRecipes()
-  // renderResult(searchResult)
   renderRecipes(searchResult)
+
   addEventFilter()
   generateIngredientsList(searchResult)
   generateAppliancesList(searchResult)
@@ -471,6 +449,8 @@ search_form.addEventListener('submit', (e) => {
     generateIngredientsList(searchResult)
     generateAppliancesList(searchResult)
     generateUstensilsList(searchResult)
+
+    renderIngredientsList(searchResult)
 
     search_form.reset()
   }
