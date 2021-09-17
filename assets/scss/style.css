@@ -3,6 +3,8 @@ html {
   font-size: 100%;
   font-family: "Lato", sans-serif;
   box-sizing: border-box;
+  max-width: 90vw;
+  margin: auto;
 }
 
 *, *::before, *::after {
@@ -94,6 +96,7 @@ i.fas.fa-chevron-down {
 .recipe {
   width: 380px;
   max-width: 380px;
+  min-height: 350px;
   font-family: "Lato", sans-serif;
   background-color: #E7E7E7;
   border-radius: 5px;
@@ -123,6 +126,7 @@ i.fas.fa-chevron-down {
   margin: auto;
   display: flex;
   font-size: 12px;
+  padding-bottom: 1rem;
 }
 .recipe .recipe-infos__ingredients {
   width: 50%;
@@ -130,6 +134,7 @@ i.fas.fa-chevron-down {
 .recipe .recipe-infos__ingredients ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 .recipe .recipe-infos__description {
   width: 50%;
@@ -195,6 +200,13 @@ input {
 
 .search-buttons {
   display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+@media (min-width: 75em) {
+  .search-buttons {
+    flex-direction: row;
+  }
 }
 .search-buttons > div {
   position: relative;
