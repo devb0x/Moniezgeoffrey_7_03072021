@@ -96,6 +96,7 @@ i.fas.fa-chevron-down {
 .recipe {
   width: 380px;
   max-width: 380px;
+  min-height: 350px;
   font-family: "Lato", sans-serif;
   background-color: #E7E7E7;
   border-radius: 5px;

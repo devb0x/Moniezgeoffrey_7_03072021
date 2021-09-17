@@ -30,6 +30,7 @@ let ingredientsList = []
 let appliancesList = []
 let ustensilsList =[]
 let filterList = []
+let searchResults = []
 
 /**
  * recipesList[]
@@ -47,6 +48,7 @@ function fetchAllRecipes() {
     .then(data => {
       data.recipes.forEach(el => {
         recipesList.push(el)
+        searchResults = [...recipesList]
       })
     })
 }
@@ -218,7 +220,7 @@ function renderIngredientsList() {
     li.addEventListener('click', (e) => {
       addToFilterList({category: 'ingredient', value: e.target.innerText.toLowerCase()})
       renderFilter({category: 'ingredient', value: e.target.innerText.toLowerCase()}, 'btn_blue')
-      filterRecipes(recipesList, e.target.innerText.toLowerCase())
+      filterRecipes(searchResults, e.target.innerText.toLowerCase())
     })
 
     ingredientsList_ul.appendChild(li)
@@ -240,7 +242,7 @@ function renderAppliancesList() {
     li.addEventListener('click', (e) => {
       addToFilterList({category: 'appliance', value: e.target.innerText.toLowerCase()})
       renderFilter({category: 'appliance', value: e.target.innerText.toLowerCase()}, 'btn_green')
-      filterRecipes(recipesList, e.target.innerText.toLowerCase())
+      filterRecipes(searchResults, e.target.innerText.toLowerCase())
     })
 
     appliancesList_ul.appendChild(li)
@@ -262,7 +264,7 @@ function renderUstensilsList() {
     li.addEventListener('click', (e) => {
       addToFilterList({category: 'ustensil', value: e.target.innerText.toLowerCase()})
       renderFilter({category: 'ustensil', value: e.target.innerText.toLowerCase()}, 'btn_red')
-      filterRecipes(recipesList, e.target.innerText.toLowerCase())
+      filterRecipes(searchResults, e.target.innerText.toLowerCase())
     })
 
     ustensilsList_ul.appendChild(li)
@@ -282,7 +284,7 @@ function renderIngredientsListFiltered(ingredientsSearchResult) {
     li.addEventListener('click', (e) => {
       addToFilterList({category: 'ingredient', value: e.target.innerText.toLowerCase()})
       renderFilter({category: 'ingredient', value: e.target.innerText.toLowerCase()}, 'btn_blue')
-      filterRecipes(recipesList, e.target.innerText.toLowerCase())
+      filterRecipes(searchResults, e.target.innerText.toLowerCase())
     })
 
     ingredientsList_ul.appendChild(li)
@@ -302,7 +304,7 @@ function renderAppliancesListFiltered(appliancesSearchResult) {
     li.addEventListener('click', (e) => {
       addToFilterList({category: 'appliance', value: e.target.innerText.toLowerCase()})
       renderFilter({category: 'appliance', value: e.target.innerText.toLowerCase()}, 'btn_green')
-      filterRecipes(recipesList, e.target.innerText.toLowerCase())
+      filterRecipes(searchResults, e.target.innerText.toLowerCase())
     })
 
     appliancesList_ul.appendChild(li)
@@ -322,7 +324,7 @@ function renderUstensilsListFiltered(ustensilsSearchResult) {
     li.addEventListener('click', (e) => {
       addToFilterList({category: 'ustensil', value: e.target.innerText.toLowerCase()})
       renderFilter({category: 'ustensil', value: e.target.innerText.toLowerCase()}, 'btn_red')
-      filterRecipes(recipesList, e.target.innerText.toLowerCase())
+      filterRecipes(searchResults, e.target.innerText.toLowerCase())
     })
 
     ustensilsList_ul.appendChild(li)
@@ -387,8 +389,18 @@ function addEventFilter() {
         return item.value !== filterValue
       })
       resetRenderRecipes()
-      filterRecipes(recipesList)
+      filterRecipes(searchResults)
     }))
+  }
+}
+
+function resetFilters() {
+  filterList = []
+
+  const filterItem = document.querySelectorAll('.filter-item')
+
+  if (filterItem) {
+    filterItem.forEach(el => el.remove())
   }
 }
 
@@ -396,61 +408,54 @@ function addEventFilter() {
  * Main research
  * @event input
  */
-// search_form.addEventListener('input', (e) => {
-//   e.preventDefault()
-//
-//   if (search_input.value && search_input.value.length < 3) {
-//     resetRenderRecipes()
-//     renderRecipes()
-//
-//     generateIngredientsList()
-//     generateAppliancesList()
-//     generateUstensilsList()
-//   }
-//   /**
-//    * the research start at 3 character
-//    */
-//   if (search_input.value && search_input.value.length > 2) {
-//     let searchResult = search(recipesList, search_input.value)
-//     /**
-//      * reset DOM and render the recipes
-//      */
-//     resetRenderRecipes()
-//     // renderResult(searchResult)
-//     renderRecipes(searchResult)
-//
-//     generateIngredientsList(searchResult)
-//     generateAppliancesList(searchResult)
-//     generateUstensilsList(searchResult)
-//
-//     // renderIngredientsList()
-//     // renderAppliancesList()
-//     // renderUstensilsList()
-//   }
-// })
+search_form.addEventListener('input', (e) => {
+  e.preventDefault()
+
+  if (search_input.value && search_input.value.length < 3) {
+    resetRenderRecipes()
+    renderRecipes()
+
+    generateIngredientsList()
+    generateAppliancesList()
+    generateUstensilsList()
+  }
+  /**
+   * the research start at 3 character
+   */
+  if (search_input.value && search_input.value.length > 2) {
+    searchResults = search(recipesList, search_input.value)
+    /**
+     * reset DOM and render the recipes
+     */
+    resetRenderRecipes()
+    renderRecipes(searchResults)
+
+    generateIngredientsList(searchResults)
+    generateAppliancesList(searchResults)
+    generateUstensilsList(searchResults)
+  }
+})
 
 /**
  * Main research
  * @event submit
  */
 search_form.addEventListener('submit', (e) => {
-  // filterList = []
-
   e.preventDefault()
+  resetFilters()
+
   search_input.blur()
   if (search_input.value && search_input.value.length > 2) {
-    let searchResult = search(recipesList, search_input.value)
+    searchResults = search(recipesList, search_input.value)
     /**
      * reset DOM and render the recipes
      */
     resetRenderRecipes()
-    renderRecipes(searchResult)
+    renderRecipes(searchResults)
 
-    generateIngredientsList(searchResult)
-    generateAppliancesList(searchResult)
-    generateUstensilsList(searchResult)
-
-    renderIngredientsList(searchResult)
+    generateIngredientsList(searchResults)
+    generateAppliancesList(searchResults)
+    generateUstensilsList(searchResults)
 
     search_form.reset()
   }
