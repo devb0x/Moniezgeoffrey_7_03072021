@@ -1,0 +1,64 @@
+@use "../utils" as *;
+
+.recipe {
+  width: 380px;
+  max-width: 380px;
+  min-height: 350px;
+  font-family: $lato;
+  background-color: #E7E7E7;
+  border-radius: 5px;
+  margin: auto;
+
+  .recipe-img {
+    height: 178px;
+    background-color: hsl(0, 7%, 76%, 1);
+    border-radius: 5px 5px 0 0;
+  }
+
+  .recipe-header {
+    width: 90%;
+    margin: auto;
+    font-size: 18px;
+    display: flex;
+
+    &__title {
+      font-weight: normal;
+      font-size: 18px;
+    }
+
+    &__time {
+      font-weight: bold;
+      margin: auto 0 auto auto;
+    }
+  }
+
+  .recipe-infos {
+    width: 90%;
+    margin: auto;
+     display: flex;
+    font-size: 12px;
+    padding-bottom: 1rem;
+
+    &__ingredients {
+      width: 50%;
+
+      & ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+    }
+
+    &__description {
+      width: 50%;
+      font-family: $roboto;
+      max-height: 109px;
+      overflow: hidden;
+     }
+  }
+
+}
+
+i {
+  margin-right: 0.5rem;
+}

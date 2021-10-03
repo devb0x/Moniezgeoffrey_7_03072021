@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="https://kit.fontawesome.com/95587cb5c9.js" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="./assets/scss/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Roboto&display=swap" rel="stylesheet">
+
+  <title>Les Petits Plats</title>
+</head>
+<body>
+
+  <header>
+    <img src="./assets/images/les-petits-plats_logo.png" alt="logo les petits plats">
+  </header>
+
+  <section class="search">
+
+    <form action="" id="searchForm">
+      <div class="searchFormInput">
+        <label for="searchFormInput"></label>
+        <input type="text" id="searchFormInput" placeholder="Rechercher un ingrédient, appareil, ustensiles ou une recette">
+      </div>
+    </form>
+
+    <div class="filters-list"></div>
+
+    <div class="search-buttons">
+
+      <div class="ingredients">
+        <button type="button" class="btn btn_blue" id="ingredientsBtn">Ingredients<i class="fas fa-chevron-down"></i></button>
+        <div id="ingredientsDropDown" class="dropdown-content bg_blue hidden">
+          <label for="ingredientsSearchInput"></label>
+          <div class="dropdown-content__input">
+            <input type="text" id="ingredientsSearchInput" placeholder="Rechercher un ingrédient">
+            <i class="fas fa-chevron-down dropdown-content__arrow ingredients-arrow"></i>
+          </div>
+
+          <div class="filters-results">
+            <ul class="filters-results-list ingredients-list"></ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="appliances">
+        <button type="button" class="btn btn_green" id="appliancesBtn">Appareils<i class="fas fa-chevron-down"></i></button>
+        <div id="appliancesDropDown" class="dropdown-content bg_green hidden">
+          <label for="appliancesSearchInput"></label>
+          <div class="dropdown-content__input">
+            <input type="text" id="appliancesSearchInput" placeholder="Rechercher un appareil">
+            <i class="fas fa-chevron-down dropdown-content__arrow appliances-arrow"></i>
+          </div>
+
+          <div class="filters-results">
+            <ul class="filters-results-list appliances-list"></ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="ustensils">
+        <button type="button" class="btn btn_red" id="ustensilsBtn">Ustensiles<i class="fas fa-chevron-down"></i></button>
+        <div id="ustensilsDropDown" class="dropdown-content bg_red hidden">
+          <label for="ustensilsSearchInput"></label>
+          <div class="dropdown-content__input">
+            <input type="text" id="ustensilsSearchInput" placeholder="Rechercher un ustensile">
+            <i class="fas fa-chevron-down dropdown-content__arrow ustensils-arrow"></i>
+          </div>
+
+          <div class="filters-results">
+            <ul class="filters-results-list ustensils-list"></ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+  </section>
+
+  <section class="recipes">
+
+  </section>
+
+  <script src="./assets/js/algo-deux.js" type="module"></script>
+</body>
+</html>

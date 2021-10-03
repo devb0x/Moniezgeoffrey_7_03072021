@@ -1,0 +1,36 @@
+@use "../utils" as *;
+
+html {
+  font-size: 100%;
+  font-family: $lato;
+  box-sizing: border-box;
+  max-width: 90vw;
+  margin: auto;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+body {
+  max-width: 1240px;
+  margin: auto;
+  padding: 0;
+}
+
+.bg_blue {
+  background-color: $blue;
+}
+
+.bg_green {
+  background-color: $green;
+}
+
+.bg_red {
+  background-color: $red;
+}
+
+
+.hidden {
+  display: none;
+}
